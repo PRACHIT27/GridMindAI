@@ -1,0 +1,9 @@
+title: "GridMind Model Invoker"
+description: >
+  Calls a Vertex AI model endpoint and nothing else. Narrower than
+  roles/aiplatform.user, which also permits creating datasets, training jobs
+  and endpoints -- none of which any GridMind agent needs, and all of which
+  would be costly to leave open on a $300 credit.
+stage: "GA"
+includedPermissions:
+  - aiplatform.endpoints.predict

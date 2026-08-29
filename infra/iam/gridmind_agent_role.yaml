@@ -1,0 +1,14 @@
+title: "GridMind Agent Access"
+description: >
+  Least-privilege Firestore access for GridMind agents. Deliberately narrower
+  than roles/datastore.user, which grants project-wide datastore access across
+  every database. Notably omits datastore.entities.delete -- no agent has any
+  legitimate reason to destroy capacity records.
+stage: "GA"
+includedPermissions:
+  - datastore.databases.get
+  - datastore.entities.get
+  - datastore.entities.list
+  - datastore.entities.create
+  - datastore.entities.update
+  - datastore.indexes.list
