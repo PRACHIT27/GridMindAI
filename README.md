@@ -100,9 +100,33 @@ access.
 Three independent layers, each demonstrated by a real denial:
 
 1. **Database** — `power-agent-sa` reading `cost-db` → **403 from Firestore**
-2. **Network** — every service is `--no-allow-unauthenticated`; only the
-   gateway may invoke a specialist
+2. **Network** — the four specialists and the gateway are `--ingress=internal`,
+   inside `gridmind-vpc`. From the internet they return **404**: not refused,
+   *unreachable*. Google will not even confirm they exist.
 3. **Routing** — the gateway checks a routing table and logs every allow/deny
+
+### Network posture
+
+| Service | Ingress | Egress | Reachable from internet |
+|---|---|---|---|
+| `orchestrator` | `all` | Direct VPC | yes, **with a valid token** (403 without) |
+| `gateway` | `internal` | Direct VPC | **no — 404** |
+| 4 specialists | `internal` | — | **no — 404** |
+
+Two halves are required and **both** must be in place. `ingress=internal` on
+the callee refuses anything not originating in the VPC; **Direct VPC egress**
+on the caller routes its outbound traffic through the VPC so it qualifies.
+Setting only the first breaks every call with a 403 that looks exactly like an
+IAM misconfiguration and is not one.
+
+We use Direct VPC egress rather than a Serverless VPC Access connector: a
+connector runs 2+ VMs continuously, roughly $10/month of idle burn against a
+$300 credit. The subnet has **Private Google Access** enabled, which is what
+lets agents reach Firestore and Vertex AI without Cloud NAT — another running
+resource we would otherwise have to pay for.
+
+Out of scope: **VPC Service Controls**. It requires org-level Access Context
+Manager rights, which a university-owned project does not delegate to students.
 
 The orchestrator is bound to `shared-db` **only**. It is architecturally
 incapable of reading raw power, cooling, facilities or cost data — so "the
@@ -212,6 +236,7 @@ gcloud auth application-default login
 python -m seed.generate_seed_data
 
 # 7. Deploy six Cloud Run services and wire the invoker chain
+bash infra/network/01_create_vpc.sh
 bash infra/cloudrun/deploy.sh
 ```
 

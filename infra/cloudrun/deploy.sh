@@ -9,6 +9,14 @@
 #   --max-instances=2   a runaway loop cannot spawn hundreds of containers
 #   --cpu=1 --memory=1Gi and a concurrency of 8 keep each instance small
 #
+# NETWORK POSTURE (see infra/network/):
+#   The 4 specialists and the gateway are --ingress=internal: unreachable from
+#   the internet at all, not merely rejected. The orchestrator and gateway get
+#   Direct VPC egress so their calls originate INSIDE the VPC and therefore
+#   qualify as internal. Both halves are required -- ingress=internal without
+#   the caller's VPC egress breaks every call with a 403 that looks like IAM.
+#   Run infra/network/01_create_vpc.sh before deploying.
+#
 # SECURITY POSTURE:
 #   --no-allow-unauthenticated on ALL six services. Nothing is publicly
 #   reachable. Invocation rights are granted explicitly below, forming a chain:
@@ -22,6 +30,8 @@ BUILD=1
 [[ "${1:-}" == "--no-build" ]] && BUILD=0
 
 REPO="gridmind"
+VPC="gridmind-vpc"
+SUBNET="gridmind-subnet"
 IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO}/gridmind:latest"
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 
@@ -51,6 +61,7 @@ deploy_specialist() {
     --service-account="${domain}-agent-sa@${PROJECT_ID}.iam.gserviceaccount.com" \
     --set-env-vars="GRIDMIND_ROLE=${domain},GRIDMIND_PROJECT_ID=${PROJECT_ID}" \
     --no-allow-unauthenticated \
+    --ingress=internal \
     --min-instances=0 --max-instances=2 \
     --cpu=1 --memory=1Gi --concurrency=8 --timeout=300 \
     --quiet
@@ -77,6 +88,8 @@ gcloud run deploy gateway \
   --service-account="gateway-agent-sa@${PROJECT_ID}.iam.gserviceaccount.com" \
   --set-env-vars="GRIDMIND_ROLE=gateway,GRIDMIND_PROJECT_ID=${PROJECT_ID},GRIDMIND_POWER_URL=${POWER_URL},GRIDMIND_COOLING_URL=${COOLING_URL},GRIDMIND_FACILITIES_URL=${FACILITIES_URL},GRIDMIND_COST_URL=${COST_URL}" \
   --no-allow-unauthenticated \
+  --ingress=internal \
+  --network="$VPC" --subnet="$SUBNET" --vpc-egress=all-traffic \
   --min-instances=0 --max-instances=2 \
   --cpu=1 --memory=512Mi --concurrency=16 --timeout=300 \
   --quiet
@@ -92,6 +105,8 @@ gcloud run deploy orchestrator \
   --service-account="orchestrator-agent-sa@${PROJECT_ID}.iam.gserviceaccount.com" \
   --set-env-vars="GRIDMIND_ROLE=orchestrator,GRIDMIND_PROJECT_ID=${PROJECT_ID},GRIDMIND_GATEWAY_URL=${GATEWAY_URL}" \
   --no-allow-unauthenticated \
+  --ingress=all \
+  --network="$VPC" --subnet="$SUBNET" --vpc-egress=all-traffic \
   --min-instances=0 --max-instances=2 \
   --cpu=1 --memory=1Gi --concurrency=4 --timeout=600 \
   --quiet

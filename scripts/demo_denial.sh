@@ -52,25 +52,50 @@ echo
 bash "$(dirname "$0")/../infra/iam/03_verify_isolation.sh"
 
 echo
-hr; echo "LAYER 2  --  NETWORK ISOLATION (Cloud Run invoker permissions)"; hr
-echo "Every service is --no-allow-unauthenticated. Specialists accept calls only"
-echo "from the gateway, so the orchestrator cannot bypass the audit trail."
+hr; echo "LAYER 2  --  NETWORK ISOLATION (VPC + internal ingress)"; hr
+echo "The 4 specialists and the gateway are --ingress=internal: they have left"
+echo "the public internet entirely. The orchestrator and gateway reach them via"
+echo "Direct VPC egress, so their calls originate inside gridmind-vpc."
 echo
 
 COST_URL=$(url_of cost-agent)
 GW_URL=$(url_of gateway)
+ORCH_URL=$(url_of orchestrator)
 
-if [[ -z "$COST_URL" || -z "$GW_URL" ]]; then
+if [[ -z "$COST_URL" || -z "$GW_URL" || -z "$ORCH_URL" ]]; then
   echo "  services not deployed; run infra/cloudrun/deploy.sh first."
 else
-  code=$(curl -s -o /dev/null -w "%{http_code}" "${COST_URL}/health")
-  check "anonymous          -> cost-agent" 403 "$code"
-  check "power-agent-sa     -> cost-agent" 403 "$(call_as power-agent-sa "$COST_URL")"
-  check "power-agent-sa     -> gateway"    403 "$(call_as power-agent-sa "$GW_URL")"
-  check "orchestrator-agent-sa -> cost-agent (must go via gateway)" 403 \
+  # The specialists and the gateway are --ingress=internal, so from the public
+  # internet they are UNREACHABLE rather than merely refused. Google answers 404
+  # -- it will not even confirm the service exists. That is a stronger result
+  # than the 403 these returned before the VPC was applied: a 403 tells an
+  # attacker there is something there worth attacking.
+  check "anonymous             -> cost-agent (internal)" 404 \
+        "$(curl -s -o /dev/null -w '%{http_code}' -m 20 "${COST_URL}/health")"
+  check "valid identity        -> cost-agent (internal)" 404 \
+        "$(call_as power-agent-sa "$COST_URL")"
+  check "orchestrator-agent-sa -> cost-agent (internal)" 404 \
         "$(call_as orchestrator-agent-sa "$COST_URL")"
-  check "gateway-agent-sa   -> cost-agent (the ONE allowed path)" 200 \
+  check "gateway-agent-sa      -> cost-agent (internal)" 404 \
         "$(call_as gateway-agent-sa "$COST_URL")"
+  check "anonymous             -> gateway (internal)" 404 \
+        "$(curl -s -o /dev/null -w '%{http_code}' -m 20 "${GW_URL}/health")"
+
+  echo
+  echo "  Even the gateway's own identity is refused FROM OUT HERE -- the"
+  echo "  permission is real, but this laptop is not in the VPC. Inside the VPC"
+  echo "  that same identity is the only one that works, which is what makes the"
+  echo "  negotiation below succeed at all."
+  echo
+
+  # The orchestrator stays reachable: a human has to be able to submit work.
+  # It is still --no-allow-unauthenticated, so a token is required.
+  check "anonymous             -> orchestrator (no token)" 403 \
+        "$(curl -s -o /dev/null -w '%{http_code}' -m 20 "${ORCH_URL}/health")"
+  check "you (authenticated)   -> orchestrator" 200 \
+        "$(curl -s -o /dev/null -w '%{http_code}' -m 20 \
+           -H "Authorization: Bearer $(gcloud auth print-identity-token | tr -d '[:space:]')" \
+           "${ORCH_URL}/health")"
 fi
 
 echo
