@@ -1,0 +1,9 @@
+# Shell scripts must keep LF endings even when checked out on Windows.
+# With core.autocrlf=true git rewrites them to CRLF, and bash then fails on
+# the trailing \r -- either "bad interpreter" on the shebang, or subtler:
+# a URL captured from command substitution ends in \r and every request
+# becomes https://host%0D/path, which 404s at Google's frontend.
+*.sh text eol=lf
+*.py text eol=lf
+*.yaml text eol=lf
+Dockerfile text eol=lf
