@@ -34,8 +34,12 @@ class NegotiateRequest(BaseModel):
     format: str = "json"          # json | text
 
 
-@app.get("/healthz")
-def healthz() -> dict:
+# NOTE: the path is /health, not /healthz. Cloud Run's frontend intercepts
+# /healthz and returns its own 404 before the request ever reaches the
+# container -- the route exists in the app's OpenAPI schema and still 404s,
+# which is a confusing hour to lose.
+@app.get("/health")
+def health() -> dict:
     return {"status": "ok", "service": "orchestrator", "project": PROJECT_ID,
             "model": MODEL_ORCHESTRATOR, "round_limit": MAX_NEGOTIATION_ROUNDS,
             "gateway": os.environ.get("GRIDMIND_GATEWAY_URL", "(in-process)")}

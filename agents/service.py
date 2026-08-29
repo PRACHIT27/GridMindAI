@@ -46,8 +46,12 @@ def create_app(domain: str) -> FastAPI:
     app = FastAPI(title=f"GridMind {domain} agent", version="1.0.0")
     agent = build_agent()
 
-    @app.get("/healthz")
-    def healthz() -> dict:
+    # NOTE: the path is /health, not /healthz. Cloud Run's frontend intercepts
+    # /healthz and returns its own 404 before the request ever reaches the
+    # container -- the route exists in the app's OpenAPI schema and still 404s,
+    # which is a confusing hour to lose.
+    @app.get("/health")
+    def health() -> dict:
         # Deliberately does NOT touch Firestore or Vertex. Cloud Run probes this
         # on every cold start; making it do real work would add latency and cost
         # to a scale-to-zero service for no diagnostic value.

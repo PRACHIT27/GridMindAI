@@ -80,8 +80,12 @@ def _id_token_for(url: str) -> str:
         google.auth.transport.requests.Request(), url)
 
 
-@app.get("/healthz")
-def healthz() -> dict:
+# NOTE: the path is /health, not /healthz. Cloud Run's frontend intercepts
+# /healthz and returns its own 404 before the request ever reaches the
+# container -- the route exists in the app's OpenAPI schema and still 404s,
+# which is a confusing hour to lose.
+@app.get("/health")
+def health() -> dict:
     return {"status": "ok", "service": "gateway", "project": PROJECT_ID,
             "routes": {k: sorted(v) for k, v in ROUTING_TABLE.items()},
             "agents_configured": {k: bool(v) for k, v in AGENT_URLS.items()}}

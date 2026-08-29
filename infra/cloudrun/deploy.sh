@@ -60,7 +60,7 @@ for d in "${DOMAINS[@]}"; do deploy_specialist "$d"; done
 
 url_of() {
   gcloud run services describe "$1" --region="$REGION" --project="$PROJECT_ID" \
-    --format="value(status.url)"
+    --format="value(status.url)" | tr -d '[:space:]'
 }
 
 POWER_URL=$(url_of power-agent)
