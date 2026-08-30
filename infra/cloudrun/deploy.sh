@@ -186,9 +186,9 @@ ORCH_URL=$(url_of orchestrator)
 # boundary. It is passed as an env var rather than a Secret Manager reference
 # because it protects a spending cap, not data -- nothing behind it is
 # confidential, and every read path is already public by design.
-echo "== deploying web (public)"
+echo "== deploying gridmind (public)"
 DEMO_KEY="${GRIDMIND_DEMO_KEY:-$(openssl rand -hex 12 2>/dev/null || echo gridmind-demo)}"
-gcloud run deploy web \
+gcloud run deploy gridmind \
   --image="$IMAGE" \
   --region="$REGION" \
   --project="$PROJECT_ID" \
@@ -201,7 +201,7 @@ gcloud run deploy web \
   --cpu=1 --memory=512Mi --concurrency=40 --timeout=600 \
   --quiet
 
-WEB_URL=$(url_of web)
+WEB_URL=$(url_of gridmind)
 
 # ---------- invoker chain ----------
 # Least privilege at the network layer, mirroring the database isolation.
@@ -255,7 +255,7 @@ cat <<EOF
 DEPLOYED
 
   PUBLIC (the only one)
-    web            ${WEB_URL}
+    gridmind       ${WEB_URL}
 
   INTERNAL -- unreachable from the internet, 404 from outside the VPC
     orchestrator   ${ORCH_URL}

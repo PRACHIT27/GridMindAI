@@ -204,6 +204,11 @@ class Orchestrator:
                         "conflict_type": r.report.conflict_type,
                         "conflicts": r.report.conflicts,
                         "endorsed_zones": r.report.endorsed_zones,
+                        "ruled_out_by": r.report.ruled_out_by,
+                        # The decisive field. Non-empty means a deployable plan
+                        # EXISTS -- the remaining disagreement is preference, not
+                        # a deadlock, and escalating would be a false negative.
+                        "zones_surviving_all_exclusions": r.report.surviving_zones,
                     },
                     "verdicts": [v.model_dump() for v in r.verdicts],
                 }
@@ -212,6 +217,9 @@ class Orchestrator:
             "rounds_used": len(result.rounds),
             "round_limit": MAX_NEGOTIATION_ROUNDS,
             "memory_bank_precedent": result.precedent,
+            # Restated at the top level so it cannot be missed inside the rounds.
+            "zones_surviving_all_exclusions_final": last.report.surviving_zones,
+            "a_deployable_plan_exists": bool(last.report.surviving_zones),
         }
 
         prompt = (

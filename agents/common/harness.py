@@ -166,12 +166,27 @@ class AgentHarness:
             round_number=round_number,
         )
 
+        # Records how the verdict was arrived at, not just what it says. A
+        # verdict the guardrail had to reject and re-prompt is materially less
+        # trustworthy than one that was right first time, and an auditor cannot
+        # see that difference from the reasoning text alone.
+        audit: dict[str, Any] = {"attempts": 0, "corrections": []}
+
         try:
-            verdict = self._decide_with_retry(ctx)
+            verdict = self._decide_with_retry(ctx, audit)
         except Exception as exc:
             return self._fail_safe(ctx, exc)
 
-        verdict.constraint_snapshot = {**ctx.snapshot(), **verdict.constraint_snapshot}
+        verdict.constraint_snapshot = {
+            **ctx.snapshot(),
+            **verdict.constraint_snapshot,
+            "harness": {
+                "attempts_used": audit["attempts"],
+                "corrected_by_guardrail": bool(audit["corrections"]),
+                "guardrail_corrections": audit["corrections"],
+                "model": self.model,
+            },
+        }
         obs.log("verdict_returned", agent=self.domain, correlation_id=correlation_id,
                 round=round_number, status=verdict.status, zone=verdict.target_zone,
                 confidence=verdict.confidence,
@@ -180,13 +195,16 @@ class AgentHarness:
 
     # ---------------- internals ----------------
 
-    def _decide_with_retry(self, ctx: ConstraintContext) -> AgentVerdict:
+    def _decide_with_retry(self, ctx: ConstraintContext,
+                           audit: dict[str, Any]) -> AgentVerdict:
         corrections: list[str] = []
 
         def _log_retry(state: RetryCallState) -> None:
             exc = state.outcome.exception() if state.outcome else None
             if exc is not None:
-                corrections.append(self._correction_for(exc))
+                text = self._correction_for(exc)
+                corrections.append(text)
+                audit["corrections"].append(text[:300])
             obs.log("agent_attempt_failed", level="warn", agent=self.domain,
                     correlation_id=ctx.correlation_id, attempt=state.attempt_number,
                     error_type=type(exc).__name__, error=str(exc)[:400])
@@ -199,6 +217,7 @@ class AgentHarness:
             reraise=True,
         )
         def _attempt() -> AgentVerdict:
+            audit["attempts"] += 1
             return self._one_attempt(ctx, corrections)
 
         return _attempt()
@@ -286,8 +305,19 @@ class AgentHarness:
                 "that a zone lacks the electrical headroom, lacks the cooling ports, is "
                 "the wrong cooling type, or has a floor rating below the rack weight, "
                 "that zone cannot host this workload no matter how good it looks on your "
-                "axis. Stop endorsing it. Move to the best remaining zone your own "
-                "constraints allow, and say which peer finding ruled the other one out.",
+                "axis. Stop endorsing it, and say which peer finding ruled it out.",
+                "",
+                # Without this an agent keeps optimising its own axis while its peers
+                # have already converged: Power holding out for the roomiest zone when
+                # the zone everyone else agreed on cleared its limits comfortably. The
+                # result is a false escalation -- a workable plan refused because no
+                # single zone was every agent's favourite.
+                "YOU ARE ASSESSING FEASIBILITY, NOT CHOOSING A FAVOURITE. If a zone your "
+                "peers have endorsed SATISFIES your own constraints, endorse it too, even "
+                "when another zone would suit your axis better. A zone that clears every "
+                "team's limits beats one that is merely optimal for yours. Hold out only "
+                "when the peers' zone genuinely fails a limit you own -- and then say "
+                "which limit, with the numbers.",
                 "",
                 "Timing and money are negotiable. Physics and law are not. If the only "
                 "workable zone needs a delay or a one-off cost, say so with numbers "

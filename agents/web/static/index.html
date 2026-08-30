@@ -213,31 +213,32 @@ footer{margin-top:44px;padding-top:22px;border-top:1px solid var(--line);
 
 <div class="wrap">
 <header>
-  <span class="eyebrow"><span class="dot"></span> Live on Google Cloud · Gemini 3.5 · six Cloud Run services</span>
-  <h1>Four agents that <span class="g">disagree</span><br>into one workable plan.</h1>
+  <span class="eyebrow"><span class="dot"></span> Capacity assurance for high-density data centers</span>
+  <h1>Know if it fits<br>before the racks <span class="g">ship</span>.</h1>
   <p class="sub">
-    A GPU workload needs a home. <b>Power</b>, <b>cooling</b>, <b>facilities</b> and <b>cost</b>
-    each judge one axis, each reading only its own database — none can see the others'.
-    All four can approve and still describe <b>no valid plan</b>. GridMind finds the plan
-    hiding between them, or escalates to a human.
+    A high-density workload has to clear <b>power</b>, <b>cooling</b>, <b>floor space</b> and
+    <b>budget</b> at the same time. Today those four checks happen in four inboxes, over
+    several days, and nobody checks them <b>together</b> — so approvals that are each
+    correct can still add up to a plan that cannot be built. GridMind checks joint
+    feasibility in minutes and writes down why.
   </p>
   <div class="stats">
-    <div class="stat"><div class="n" id="s-runs">—</div><div class="l">decisions made</div></div>
-    <div class="stat"><div class="n">5</div><div class="l">isolated databases</div></div>
-    <div class="stat"><div class="n">404</div><div class="l">agents, from the internet</div></div>
-    <div class="stat"><div class="n">~2.5¢</div><div class="l">per negotiation</div></div>
+    <div class="stat"><div class="n" id="s-mw">32.9 MW</div><div class="l">IT load under assessment</div></div>
+    <div class="stat"><div class="n">600</div><div class="l">racks across 4 zones</div></div>
+    <div class="stat"><div class="n" id="s-runs">—</div><div class="l">placements assessed</div></div>
+    <div class="stat"><div class="n">minutes</div><div class="l">instead of days</div></div>
   </div>
 </header>
 
 <div class="tabbar">
-  <button id="t-new" class="on">New request</button>
-  <button id="t-hist">Decision history</button>
-  <button id="t-reg">Agent registry</button>
+  <button id="t-new" class="on">New assessment</button>
+  <button id="t-hist">History</button>
+  <button id="t-reg">Assessors</button>
 </div>
 
 <div id="view-new">
   <div class="panel">
-    <h2>Submit a workload request</h2>
+    <h2>Assess a placement</h2>
     <div class="seg" style="max-width:340px">
       <button id="tab-preset" class="on">From the queue</button>
       <button id="tab-custom">Build your own</button>
@@ -279,14 +280,15 @@ footer{margin-top:44px;padding-top:22px;border-top:1px solid var(--line);
           <option value="crew_shortage">Crew shortage &mdash; few certified techs</option>
           <option value="freight_delay">Freight delay &mdash; port congestion</option>
         </select></div>
-      <div><label for="key">Demo key <span style="text-transform:none;letter-spacing:0;color:var(--dimmer)">&mdash; optional</span></label>
-        <input id="key" type="password" placeholder="skips the rate limit"></div>
+      <div><label for="key">Access key <span style="text-transform:none;letter-spacing:0;color:var(--dimmer)">&mdash; optional</span></label>
+        <input id="key" type="password" placeholder="for unrestricted access"></div>
       <div style="display:flex;align-items:flex-end">
-        <button class="go" id="run" style="margin-top:0">Run the negotiation</button></div>
+        <button class="go" id="run" style="margin-top:0">Check feasibility</button></div>
     </div>
     <div class="hint">
-      Five agents, live against Gemini 3.5, up to three rounds &mdash; 60&ndash;90 seconds.
-      Each run costs real Gemini calls, so visitors get one per 90 s.
+      Four specialist assessments plus reconciliation, typically 60&ndash;90 seconds.
+      This is a public demonstration environment, so assessments are rate limited to
+      one per 90 seconds.
     </div>
   </div>
 
@@ -294,8 +296,8 @@ footer{margin-top:44px;padding-top:22px;border-top:1px solid var(--line);
     <h2>Facility iad-dc-01 &middot; Ashburn, Virginia</h2>
     <div class="zones" id="zonemap"></div>
     <div class="hint" id="zonehint">
-      Four zones, 464 racks, 32.9 MW IT load. Run a negotiation and watch zones get
-      eliminated &mdash; each by a different agent, for a reason only that agent can see.
+      Four zones, 600 racks, 32.9 MW IT load, 136 racks free. Each zone is checked against every limit
+      that applies to it, and ruled out by whichever one it fails first.
     </div>
   </div>
 
@@ -304,11 +306,11 @@ footer{margin-top:44px;padding-top:22px;border-top:1px solid var(--line);
 
 <div id="view-hist" style="display:none">
   <div class="panel">
-    <h2>Every decision this system has made</h2>
+    <h2>Assessment history</h2>
     <p class="hint" style="margin:0 0 14px">
-      Read straight from <span class="mono">shared-db/negotiation_log</span> &mdash; the same
-      audit record the orchestrator writes. Open one to replay its rounds, or download
-      the decision report as a PDF.
+      Every assessment is retained in full: each team's finding, what changed between
+      rounds, and the figures behind it. Open one to review it, or download the signed
+      decision report.
     </p>
     <table id="past"><tbody><tr><td class="mono" style="color:var(--dimmer)">loading&hellip;</td></tr></tbody></table>
   </div>
@@ -316,21 +318,21 @@ footer{margin-top:44px;padding-top:22px;border-top:1px solid var(--line);
 
 <div id="view-reg" style="display:none">
   <div class="panel">
-    <h2>Agent registry &mdash; discovery, contracts and data scope</h2>
+    <h2>Assessors</h2>
     <p class="hint" style="margin:0 0 16px">
-      Published to <span class="mono">shared-db/agent_registry</span> at deploy time. Each
-      entry declares what the agent judges, what it refuses, the schema it speaks, and
-      &mdash; the load-bearing part &mdash; the single database it can read and the four it
-      cannot. Those values drive the IAM conditions, so an entry that lied would be caught
-      by <span class="mono">03_verify_isolation.sh</span>.
+      Four specialists, each answering one question against one team&rsquo;s data. They
+      work independently and cannot see each other&rsquo;s findings while assessing &mdash;
+      which is what makes four separate answers worth having, rather than four versions of
+      the same opinion. Every limit below is one the assessor will not waive.
     </p>
     <div id="registry">loading&hellip;</div>
   </div>
 </div>
 
 <footer>
-  <span>GridMind · multi-agent capacity allocation · Ashburn, VA (simulated)</span>
-  <span class="mono">Gemini 3.5 · Cloud Run · Firestore · VPC</span>
+  <span>GridMind · capacity assurance for high-density data centers</span>
+  <span>Transparent · secure · every decision auditable</span>
+  <span style="color:var(--dimmer)">Demonstration environment · simulated facility</span>
 </footer>
 </div>
 
@@ -445,8 +447,8 @@ function roundBlock(r){
   const ro=Object.entries(r.ruled_out_by||{}).filter(([,z])=>z&&z.length);
   const sv=r.surviving_zones||[];
   return `<div class="round"><div class="rh"><b>Round ${r.round}</b>
-    <span>${r.round===1?'independent — no agent sees another&rsquo;s answer'
-                       :'re-prompted with the others&rsquo; positions'}</span></div>
+    <span>${r.round===1?'independent — each team assesses without seeing the others'
+                       :'re-assessed against the other teams&rsquo; findings'}</span></div>
     <div class="ags">${r.verdicts.map(agentCard).join('')}</div>
     <div class="chk"><b>Joint feasibility:</b>
       <span style="color:${r.conflict_type==='zone_mismatch'?'var(--warn)':'var(--ok)'}">
@@ -524,9 +526,10 @@ async function reveal(data){
 }
 
 /* ============ run ============ */
-const STEPS=['Waking the four agents…','Each is reading only its own database…',
-  'Collecting verdicts…','Checking whether they describe ONE deployable plan…',
-  'Conflict found — re-prompting each agent with the others&rsquo; positions…',
+const STEPS=['Assessing power capacity…','Assessing thermal capacity…',
+  'Assessing floor space and installation…','Assessing cost and procurement…',
+  'Checking whether the four assessments describe ONE deployable plan…',
+  'Constraints conflict — resolving against each team&rsquo;s limits…',
   'Reconciling into a single plan…'];
 
 let customMode=false;
@@ -555,13 +558,13 @@ $('#tab-custom').onclick=()=>{customMode=true;$('#tab-custom').classList.add('on
   $('#tab-preset').classList.remove('on');$('#pane-custom').style.display='';$('#pane-preset').style.display='none'};
 
 async function run(){
-  const b=$('#run'); b.disabled=true; b.textContent='Negotiating…';
+  const b=$('#run'); b.disabled=true; b.textContent='Assessing…';
   let i=0;
   $('#stage').innerHTML=`<div class="panel"><div class="status">
     <div class="orb"><i></i><i></i><i></i></div>
     <div id="stepmsg">${STEPS[0]}</div>
     <div style="color:var(--dimmer);font-size:12px;margin-top:9px">
-      Five agents, up to three rounds. Usually 60–90 seconds.</div></div></div>`;
+      Four independent assessments, then reconciliation. Usually 60–90 seconds.</div></div></div>`;
   const t=setInterval(()=>{i=Math.min(i+1,STEPS.length-1);
     const el=$('#stepmsg'); if(el)el.innerHTML=STEPS[i]},13000);
   try{
@@ -607,8 +610,15 @@ async function boot(){
   }catch{$('#wl').innerHTML='<option>queue unavailable</option>'}
   syncDerived(); loadPast();
 }
+const SCOPE_LABEL={'gridmind-power':'power systems data',
+  'gridmind-cooling':'thermal and cooling data',
+  'gridmind-facilities':'floor and rack inventory',
+  'gridmind-cost':'cost and procurement data',
+  'gridmind-orchestrator':'the assessors&rsquo; findings only'};
+function scopeLabel(a){return SCOPE_LABEL[a.agent_id]||'its own data';}
+
 function agentCardReg(a){
-  const sc=a.data_scope||{}, c=a.contract||{}, rt=a.runtime||{}, sg=a.safeguards||{};
+  // Card is deliberately product-level: what it covers, what it will not waive,
   return `<div class="regcard">
     <div class="reghead">
       <div><div class="regname">${esc(a.name||a.agent_id)}</div>
@@ -623,18 +633,16 @@ function agentCardReg(a){
       <div><div class="reglbl">Independently refuses</div><ul>${(a.independently_refuses||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
     </div>
     <div class="regscope">
-      <div class="reglbl" style="margin-bottom:6px">Data scope — enforced by IAM, not code</div>
-      <div><span class="yes">can read</span> <span class="mono">${esc(sc.readable_database||'—')}</span></div>
-      <div style="margin-top:3px"><span class="no">denied</span>
-        <span class="mono">${(sc.denied_databases||[]).map(esc).join(', ')||'—'}</span></div>
+      <div class="reglbl" style="margin-bottom:6px">Scope</div>
+      <div>Works only from <b>${esc(scopeLabel(a))}</b>, with no access to the other
+        teams' data — enforced by access policy, not by convention.</div>
       <div style="margin-top:6px;font-size:11px;color:var(--dimmer)">
-        Explicitly not its axis: ${(a.explicitly_not||[]).map(esc).join('; ')}</div>
+        Does not assess: ${(a.explicitly_not||[]).map(esc).join('; ')}</div>
     </div>
     <div class="regfoot">
-      <span>${esc(c.invoked_via||'')} · <span class="mono">${esc(c.endpoint||'')}</span></span>
-      <span><span class="mono">${esc(c.input_schema||'')}</span> → <span class="mono">${esc(c.output_schema||'')}</span></span>
-      <span>${esc(rt.model||'')} · ingress ${esc(rt.ingress||'')}</span>
-      <span>${esc(sg.on_exhaustion||'')}</span>
+      <span>Version ${esc(a.version||'')}</span>
+      <span>${esc(a.owner||'')}</span>
+      <span>If it cannot answer reliably, it refuses rather than guessing</span>
     </div>
   </div>`;
 }

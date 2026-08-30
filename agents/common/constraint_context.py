@@ -26,6 +26,25 @@ from .external_signals import get_external_signal
 from .policy import policy_for
 
 
+# Fields worth putting in front of a human auditor, per domain. The full zone
+# record is too wide for a report; these are the values the agents actually
+# reason over and cite, so they are what a reader needs in order to check the
+# prose against the data.
+#
+# Module scope, not a class attribute: inside a @dataclass a plain dict is
+# treated as a field with a mutable default and raises at import.
+EVIDENCE_FIELDS: dict[str, tuple[str, ...]] = {
+    "power": ("breaker_capacity_kw", "allocated_kw", "headroom_kw",
+              "spare_30a_208v_circuits", "planned_outage"),
+    "cooling": ("cooling_type", "max_kw_per_rack", "thermal_headroom_kw",
+                "free_cdu_ports", "current_pue"),
+    "facilities": ("available_racks", "liquid_ready_racks", "retrofittable_racks",
+                   "floor_load_limit_kg_per_rack"),
+    "cost": ("cost_per_kw_month_usd", "liquid_retrofit_cost_usd_per_rack",
+             "install_labor_rate_usd_per_hour"),
+}
+
+
 @dataclass(slots=True)
 class ConstraintContext:
     """Everything one agent knows, in one auditable object."""
@@ -61,12 +80,35 @@ class ConstraintContext:
         return json.dumps(payload, indent=2, sort_keys=True, default=str)
 
     def snapshot(self) -> dict[str, Any]:
-        """The compact subset stored on the verdict for later re-checking."""
+        """What this agent was GIVEN, recorded by the harness.
+
+        Deliberately captured here rather than asked of the model. The point of
+        a snapshot is to let a human check the agent's prose against the data it
+        actually saw -- and a model that will invent a headroom figure will just
+        as happily invent the snapshot that appears to support it. Self-reported
+        evidence is not evidence.
+
+        In practice the agents left this field empty anyway: an unstructured
+        dict in the response schema gives a model nothing to fill in, so
+        verdicts arrived carrying reasoning with no numbers behind it.
+        """
+        fields = EVIDENCE_FIELDS.get(self.domain, ())
+        zones = self.live_data.get("zones", {})
+        evidence = {
+            zid: {f: z.get(f) for f in fields if f in z}
+            for zid, z in sorted(zones.items())
+        }
         return {
             "round": self.round_number,
             "scenario": self.external_signal.get("scenario"),
             "observed_at": self.external_signal.get("observed_at"),
-            "zone_ids": sorted(self.live_data.get("zones", {}).keys()),
+            "zone_ids": sorted(zones.keys()),
+            # The auditable half: the figures behind whatever the agent claimed.
+            "evidence_seen": evidence,
+            "external_signal_seen": {
+                k: v for k, v in self.external_signal.items()
+                if k not in ("observed_at", "scenario", "source")
+            },
         }
 
 

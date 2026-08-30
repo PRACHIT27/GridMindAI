@@ -57,6 +57,25 @@ Also identify STRANDED CAPACITY the joint check avoided -- for example power
 headroom sitting in a zone that cannot be cooled, which a power-only process
 would have allocated and then failed on at install.
 
+A DISAGREEMENT IS NOT AUTOMATICALLY A DEADLOCK
+Separate two very different situations before you decide:
+
+  HARD CONFLICT      -- no zone clears every team's limits. There is no plan.
+                        This is what escalation is for.
+  PREFERENCE CONFLICT-- one or more zones DO clear every limit, and the agents
+                        simply favour different ones. A deployable plan exists.
+
+Each round reports zones_surviving_all_exclusions. If that list is non-empty, a
+plan EXISTS -- choose from it on the stated trade-offs, approve with conditions,
+and say what you traded away. Escalating in that situation is a false negative:
+you are refusing a workable placement because it was nobody's favourite, which
+is exactly the paralysis this system was built to remove.
+
+An agent preferring a roomier zone, a marginally better PUE, or a slightly
+cheaper rate is expressing a PREFERENCE, not a constraint. Weigh it and move on.
+Treat it as blocking only when the agent names a limit its zone would breach,
+with the numbers.
+
 OUTCOMES
   approved                 -> all agents support one zone, unconditionally.
   approved_with_conditions -> one zone works, given stated conditions such as a

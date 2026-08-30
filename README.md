@@ -197,7 +197,7 @@ Generated **once**, under a fixed seed, in three layers:
 1. **Authored constraints** — the blockers (floor ratings, CDU ports,
    liquid-ready counts, switchgear outages). Never randomized, so the demo
    conflict survives any reseed.
-2. **Seeded population** — 464 racks dealt with weighted GPU mix and
+2. **Seeded population** — 600 racks (464 occupied) dealt with weighted GPU mix and
    triangular density, *constrained by* each zone's cooling type, so an
    air-cooled zone can never be dealt a 132 kW rack.
 3. **Derived values** — loads, thermals, PUE and costs computed from those

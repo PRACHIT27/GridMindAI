@@ -54,6 +54,8 @@ S = {
                             leading=10.5, textColor=colors.white),
     "mono": ParagraphStyle("mono", fontName="Courier", fontSize=7.8, leading=10.5,
                            textColor=DIM),
+    "small": ParagraphStyle("small", fontName="Helvetica", fontSize=8, leading=11,
+                            textColor=DIM, spaceAfter=6),
 }
 
 _STATUS_COLOR = {"feasible": OK, "conditional": WARN, "infeasible": BAD}
@@ -194,6 +196,65 @@ def render_pdf(n: dict[str, Any]) -> bytes:
             A(_P(f"Zones surviving every agent's exclusions: <b>{', '.join(surviving)}</b>. "
                  f"No single agent could compute this &mdash; it is the intersection of "
                  f"four independent exclusion lists.", "p"))
+
+    # ---- the evidence behind the reasoning ----
+    # The point of this section: everything above is what the agents SAID. This
+    # is what they were SHOWN. An auditor can check one against the other --
+    # if a verdict claims 560 kW of headroom, the figure it was handed is here.
+    #
+    # Recorded by the harness, not self-reported by the model. A model that will
+    # invent a headroom figure would just as happily invent a snapshot that
+    # appears to support it.
+    last = rounds[-1] if rounds else None
+    if last:
+        A(_P("Evidence each agent was shown", "h2"))
+        A(_P("Captured by the harness at the moment of the decision, from the one "
+             "database that agent is permitted to read. Compare these figures against "
+             "the reasoning above.", "p"))
+
+        for v in sorted(last.get("verdicts", []), key=lambda x: x.get("agent", "")):
+            cs = v.get("constraint_snapshot") or {}
+            ev = cs.get("evidence_seen") or {}
+            if not ev:
+                continue
+
+            fields = sorted({k for z in ev.values() for k in z})
+            rows = [[Paragraph("zone", S["cellh"])] +
+                    [Paragraph(f.replace("_", " "), S["cellh"]) for f in fields]]
+            for zid in sorted(ev):
+                cells = [Paragraph(f"<b>{zid}</b>", S["cellb"])]
+                for f in fields:
+                    val = ev[zid].get(f)
+                    if isinstance(val, float):
+                        txt = f"{val:,.1f}"
+                    elif val is None:
+                        txt = "—"
+                    elif isinstance(val, dict):
+                        txt = "yes"          # e.g. a planned outage record
+                    else:
+                        txt = str(val)
+                    cells.append(Paragraph(txt, S["cell"]))
+                rows.append(cells)
+
+            A(Spacer(1, 3))
+            A(_P(f"<b>{v.get('agent')}</b> &mdash; read from "
+                 f"<font face='Courier'>{v.get('agent')}-db</font>", "p"))
+            width = 158 * mm
+            first = 20 * mm
+            rest = (width - first) / max(1, len(fields))
+            A(_table(rows, [first] + [rest] * len(fields)))
+
+            h = cs.get("harness") or {}
+            if h:
+                note = (f"{h.get('attempts_used', '?')} attempt(s)")
+                if h.get("corrected_by_guardrail"):
+                    # Worth surfacing: a verdict the guardrail had to reject and
+                    # re-prompt is materially weaker evidence than a first-pass one.
+                    note += " &mdash; <b>the guardrail rejected an earlier answer</b> and the "
+                    note += "agent was re-prompted with the violation"
+                else:
+                    note += " &mdash; accepted first pass, no guardrail correction"
+                A(_P(note, "small"))
 
     if d.get("unresolved_conflicts"):
         A(_P("Unresolved — requires a human decision", "h2"))
