@@ -7,7 +7,7 @@ and cost **jointly**, in real time, and producing an auditable decision.
 Built for Google's *All Things Agentic* hackathon, Track 3: **The Fortified
 Enterprise Fleet**.
 
-### ▸ Live: https://web-wuvfpvopoq-uk.a.run.app
+### ▸ Live: https://gridmind-wuvfpvopoq-uk.a.run.app
 
 Compose a workload, pick the external conditions, and watch four agents rule
 out three of the four zones — each for a reason only that agent can see.
@@ -116,7 +116,7 @@ Three independent layers, each demonstrated by a real denial:
 
 | Service | Ingress | Reachable from internet | Identity holds |
 |---|---|---|---|
-| `web` | `all`, public | **yes — the only door** | shared-db **read-only**, no model access |
+| `gridmind` | `all`, public | **yes — the only door** | shared-db **read-only**, no model access |
 | `orchestrator` | `internal` | **no — 404** | shared-db read/write |
 | `gateway` | `internal` | **no — 404** | nothing but log write |
 | 4 specialists | `internal` | **no — 404** | one database each |
@@ -269,7 +269,7 @@ python -m scripts.try_agent power --impersonate --scenario grid_stress
 **Call the deployed orchestrator:**
 
 ```bash
-curl -X POST "$(gcloud run services describe orchestrator --region=us-east4 --format='value(status.url)')/negotiate" -H "Authorization: Bearer $(gcloud auth print-identity-token)" -H "Content-Type: application/json" -d '{"workload_id":"wl-2026-0842","format":"text"}'
+curl -X POST "$(gcloud run services describe gridmind --region=us-east4 --format='value(status.url)')/negotiate" -H "Authorization: Bearer $(gcloud auth print-identity-token)" -H "Content-Type: application/json" -d '{"workload_id":"wl-2026-0842","format":"text"}'
 ```
 
 **Demonstrate the security model:**
