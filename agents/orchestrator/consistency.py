@@ -35,6 +35,8 @@ from ..common.verdict import AgentVerdict
 class ConsistencyReport:
     consistent: bool
     endorsed_zones: dict[str, str] = field(default_factory=dict)   # agent -> zone
+    ruled_out_by: dict[str, list[str]] = field(default_factory=dict)  # agent -> zones
+    surviving_zones: list[str] = field(default_factory=list)
     blocking_agents: list[str] = field(default_factory=list)
     conflicts: list[str] = field(default_factory=list)
     candidate_zones: list[str] = field(default_factory=list)
@@ -57,6 +59,29 @@ def check(verdicts: list[AgentVerdict]) -> ConsistencyReport:
     for v in feasible + conditional:
         if v.target_zone:
             rep.endorsed_zones[v.agent] = v.target_zone
+
+    # THE JOINT-FEASIBILITY ANSWER, derived from the verdicts alone.
+    #
+    # Every zone anyone mentioned, minus every zone anyone excluded. What is
+    # left is the set no agent has a hard objection to -- frequently a single
+    # zone that NOT ONE agent endorsed on its own, because each was optimising
+    # its own axis. That intersection is the thing no individual team can see
+    # from inside its silo, and computing it is the entire point of the system.
+    #
+    # Note this uses only what agents REPORTED. The orchestrator has no access
+    # to any facility database and could not derive it any other way.
+    all_zones: set[str] = set()
+    excluded: set[str] = set()
+    for v in verdicts:
+        if v.target_zone:
+            all_zones.add(v.target_zone)
+        if v.proposed_alternative and v.proposed_alternative.target_zone:
+            all_zones.add(v.proposed_alternative.target_zone)
+        if v.ruled_out_zones:
+            rep.ruled_out_by[v.agent] = list(v.ruled_out_zones)
+            all_zones.update(v.ruled_out_zones)
+            excluded.update(v.ruled_out_zones)
+    rep.surviving_zones = sorted(all_zones - excluded)
 
     # Zones any agent is willing to work with, including via an alternative.
     proposed: set[str] = set()
@@ -123,7 +148,14 @@ def peer_positions(verdicts: list[AgentVerdict], exclude: str) -> list[dict]:
             "agent": v.agent,
             "status": v.status,
             "endorses_zone": v.target_zone,
-            "position": v.reasoning.strip()[:260],
+            # The hard exclusions matter more than the endorsement: they are what
+            # stop this agent re-proposing a zone that is already dead elsewhere.
+            "rules_out_zones": v.ruled_out_zones,
+            # 420 rather than 260 -- the exclusion reason ("zone-b has only 560 kW
+            # of headroom") usually appears AFTER the endorsement in the agent's
+            # reasoning, and a tighter cut removed exactly the sentence a peer
+            # needed in order to change its mind.
+            "position": v.reasoning.strip()[:420],
         }
         if v.proposed_alternative:
             a = v.proposed_alternative

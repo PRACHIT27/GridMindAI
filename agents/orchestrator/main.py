@@ -80,6 +80,8 @@ def negotiate(req: NegotiateRequest) -> dict:
                 "consistent": r.report.consistent,
                 "conflicts": r.report.conflicts,
                 "endorsed_zones": r.report.endorsed_zones,
+                "ruled_out_by": r.report.ruled_out_by,
+                "surviving_zones": r.report.surviving_zones,
                 "verdicts": [v.model_dump() for v in r.verdicts],
             }
             for r in result.rounds

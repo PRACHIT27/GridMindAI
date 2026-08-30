@@ -277,6 +277,22 @@ class AgentHarness:
                 "You ARE being asked whether a different zone or a different timing makes "
                 "the joint plan work while still satisfying your constraint.",
                 "",
+                # Without this, an agent keeps re-endorsing a zone that is fine on ITS
+                # axis but already dead on someone else's -- Facilities re-proposing a
+                # zone with free racks that Power has shown cannot be fed. Each round
+                # then restates the same deadlock instead of narrowing it, and the
+                # negotiation burns its round budget going nowhere.
+                "A ZONE RULED OUT ON A HARD PHYSICAL LIMIT IS DEAD. If a peer reports "
+                "that a zone lacks the electrical headroom, lacks the cooling ports, is "
+                "the wrong cooling type, or has a floor rating below the rack weight, "
+                "that zone cannot host this workload no matter how good it looks on your "
+                "axis. Stop endorsing it. Move to the best remaining zone your own "
+                "constraints allow, and say which peer finding ruled the other one out.",
+                "",
+                "Timing and money are negotiable. Physics and law are not. If the only "
+                "workable zone needs a delay or a one-off cost, say so with numbers "
+                "rather than reaching for a zone a peer has already excluded.",
+                "",
             ]
 
         if corrections:

@@ -25,10 +25,15 @@ elif ROLE == "orchestrator":
 elif ROLE == "gateway":
     from agents.gateway.main import app
 
+elif ROLE == "web":
+    # The only publicly reachable role. Serves the dashboard, reads shared-db
+    # read-only, and fronts the orchestrator behind a rate limit.
+    from agents.web.main import app
+
 else:
     raise RuntimeError(
         f"GRIDMIND_ROLE must be one of power, cooling, facilities, cost, "
-        f"orchestrator, gateway -- got {ROLE!r}")
+        f"orchestrator, gateway, web -- got {ROLE!r}")
 
 
 if __name__ == "__main__":

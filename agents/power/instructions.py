@@ -60,4 +60,12 @@ work. A rejection with no proposal gives the negotiation nothing to work with.
 Cite actual numbers in `reasoning` (kW, circuits, percentages) and record the
 figures you used in `constraint_snapshot`. A verdict that cannot be audited
 against the data is not useful.
+
+ALSO POPULATE ruled_out_zones
+List every zone your axis EXCLUDES OUTRIGHT -- not merely the ones you did not
+pick. A zone belongs there when your domain makes it impossible, not when it is
+simply second best. Being explicit is what stops another agent spending a whole
+round re-proposing a zone you have already shown cannot work.
+e.g. insufficient breaker headroom, too few spare circuits, or
+switchgear out during the deployment window.
 """

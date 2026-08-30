@@ -7,6 +7,13 @@ and cost **jointly**, in real time, and producing an auditable decision.
 Built for Google's *All Things Agentic* hackathon, Track 3: **The Fortified
 Enterprise Fleet**.
 
+### ▸ Live: https://web-wuvfpvopoq-uk.a.run.app
+
+Compose a workload, pick the external conditions, and watch four agents rule
+out three of the four zones — each for a reason only that agent can see.
+Reading past decisions is unlimited; running a new negotiation is rate limited,
+because every run costs real Gemini calls.
+
 ---
 
 ## The problem
@@ -107,11 +114,18 @@ Three independent layers, each demonstrated by a real denial:
 
 ### Network posture
 
-| Service | Ingress | Egress | Reachable from internet |
+| Service | Ingress | Reachable from internet | Identity holds |
 |---|---|---|---|
-| `orchestrator` | `all` | Direct VPC | yes, **with a valid token** (403 without) |
-| `gateway` | `internal` | Direct VPC | **no — 404** |
-| 4 specialists | `internal` | — | **no — 404** |
+| `web` | `all`, public | **yes — the only door** | shared-db **read-only**, no model access |
+| `orchestrator` | `internal` | **no — 404** | shared-db read/write |
+| `gateway` | `internal` | **no — 404** | nothing but log write |
+| 4 specialists | `internal` | **no — 404** | one database each |
+
+Note the shape of that table: **the most exposed service holds the least
+privilege.** `web-bff-sa` cannot write anywhere, cannot read any facility
+database, and has no Vertex AI permission at all — so an attacker who fully
+owns the public container gets a queue of requests and a log of past decisions,
+not the facility, and no way to spend the Gemini credit.
 
 Two halves are required and **both** must be in place. `ingress=internal` on
 the callee refuses anything not originating in the VPC; **Direct VPC egress**

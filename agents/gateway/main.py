@@ -15,6 +15,7 @@ refuses it. Neither layer is load-bearing alone.
 """
 from __future__ import annotations
 
+import json
 import os
 from typing import Any
 
@@ -26,6 +27,7 @@ from pydantic import BaseModel
 
 from ..common import obs
 from ..common.config import PROJECT_ID
+from ..common.model_armor import MAX_CHARS, screen_prompt, screen_response
 
 # Which callers may reach which agents. Deliberately explicit: a new agent has
 # to be added here on purpose, so nothing becomes reachable by accident.
@@ -112,8 +114,30 @@ def route(req: RouteRequest, authorization: str | None = Header(default=None)) -
     if not url:
         raise HTTPException(status_code=503, detail=f"no URL configured for {req.agent}")
 
+    # MODEL ARMOR -- content screening, after the identity and routing checks
+    # have decided the caller is allowed at all. Order matters: there is no
+    # point paying for a screening call on a request we are about to refuse.
+    #
+    # This covers the gap the per-agent guardrails cannot. Those verify that a
+    # verdict is physically possible; they say nothing about whether the input
+    # that produced it was trying to hijack the agent.
+    inbound = json.dumps(req.workload, sort_keys=True, default=str)
+    armor = screen_prompt(inbound, what=f"workload->{req.agent}",
+                          correlation_id=req.correlation_id)
+    if armor.blocked:
+        obs.log("gateway_armor_block", level="warn", agent="gateway",
+                correlation_id=req.correlation_id, caller=caller,
+                requested_agent=req.agent, triggered=armor.triggered,
+                match_state=armor.match_state,
+                message=f"BLOCKED inbound payload to {req.agent}: {armor.summary}")
+        raise HTTPException(
+            status_code=422,
+            detail=f"Model Armor refused this payload ({armor.summary}). "
+                   f"The request never reached the {req.agent} agent.")
+
     obs.log("gateway_allowed", agent="gateway", correlation_id=req.correlation_id,
-            caller=caller, requested_agent=req.agent, round=req.round_number)
+            caller=caller, requested_agent=req.agent, round=req.round_number,
+            armor=armor.match_state)
 
     payload = req.model_dump(exclude={"agent"})
     try:
@@ -133,4 +157,24 @@ def route(req: RouteRequest, authorization: str | None = Header(default=None)) -
                 status=resp.status_code, body=resp.text[:300])
         raise HTTPException(status_code=502,
                             detail=f"{req.agent} returned {resp.status_code}")
-    return resp.json()
+
+    verdict = resp.json()
+
+    # Screen the way OUT as well. An agent given clean input can still emit
+    # something it should not -- echoing a value out of its own database, or
+    # hallucinating one. The reasoning text is what gets surfaced to humans and
+    # written to the audit log, so it is the field worth checking.
+    out_armor = screen_response(str(verdict.get("reasoning", ""))[:MAX_CHARS],
+                                what=f"verdict<-{req.agent}",
+                                correlation_id=req.correlation_id)
+    if out_armor.blocked:
+        obs.log("gateway_armor_block_outbound", level="warn", agent="gateway",
+                correlation_id=req.correlation_id, requested_agent=req.agent,
+                triggered=out_armor.triggered,
+                message=f"BLOCKED {req.agent} verdict: {out_armor.summary}")
+        raise HTTPException(
+            status_code=422,
+            detail=f"Model Armor refused the {req.agent} agent's response "
+                   f"({out_armor.summary}).")
+
+    return verdict

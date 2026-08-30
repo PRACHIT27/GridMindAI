@@ -46,6 +46,14 @@ class AgentVerdict(BaseModel):
     target_zone: Optional[str] = Field(
         None, description="Zone this verdict endorses. Load-bearing: two agents can both "
                           "say 'feasible' about DIFFERENT zones, which is not agreement.")
+    ruled_out_zones: list[str] = Field(
+        default_factory=list,
+        description="Zones this agent's axis EXCLUDES outright, e.g. ['zone-a'] for an "
+                    "air-cooled zone under a liquid workload. Distinct from simply not "
+                    "endorsing a zone: these are hard exclusions other agents should stop "
+                    "proposing. Without this, a peer keeps re-offering a zone that is fine "
+                    "on its own axis and already dead on someone else's, and rounds are "
+                    "spent restating the same deadlock.")
     proposed_alternative: Optional[ProposedAlternative] = None
     confidence: float = Field(..., ge=0.0, le=1.0)
     constraint_snapshot: dict = Field(

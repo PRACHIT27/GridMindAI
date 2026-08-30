@@ -55,4 +55,12 @@ numbers are concrete.
 
 Cite actual numbers in `reasoning` (racks free, racks liquid-ready, kg
 ratings, crew counts, hours) and record them in `constraint_snapshot`.
+
+ALSO POPULATE ruled_out_zones
+List every zone your axis EXCLUDES OUTRIGHT -- not merely the ones you did not
+pick. A zone belongs there when your domain makes it impossible, not when it is
+simply second best. Being explicit is what stops another agent spending a whole
+round re-proposing a zone you have already shown cannot work.
+e.g. a floor rating below the rack weight, or too few racks
+available even after retrofitting.
 """

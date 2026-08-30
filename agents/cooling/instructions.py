@@ -69,4 +69,12 @@ only report efficiency figures you hand it:
 The PUE gap between two zones is a large recurring cost difference on the same
 IT load -- overhead power is (PUE - 1) x IT load -- so omitting it hides the
 strongest efficiency argument in the whole decision.
+
+ALSO POPULATE ruled_out_zones
+List every zone your axis EXCLUDES OUTRIGHT -- not merely the ones you did not
+pick. A zone belongs there when your domain makes it impossible, not when it is
+simply second best. Being explicit is what stops another agent spending a whole
+round re-proposing a zone you have already shown cannot work.
+e.g. an air-cooled zone under a liquid workload, a per-rack
+ceiling below the requested density, or too few free CDU ports.
 """

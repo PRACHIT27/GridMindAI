@@ -100,6 +100,16 @@ def render(result: NegotiationResult) -> str:
         if r.report.endorsed_zones:
             zones = ", ".join(f"{a}={z}" for a, z in sorted(r.report.endorsed_zones.items()))
             out.append(f"      zones endorsed: {zones}")
+        if r.report.ruled_out_by:
+            for a, zs in sorted(r.report.ruled_out_by.items()):
+                if zs:
+                    out.append(f"      {a} rules out: {', '.join(zs)}")
+        if r.report.surviving_zones:
+            out.append(f"      ZONES SURVIVING EVERY AGENT'S EXCLUSIONS: "
+                       f"{', '.join(r.report.surviving_zones)}")
+            out.append(_wrap("No single agent could compute this -- it is the intersection "
+                             "of four independent exclusion lists, and it is frequently a "
+                             "zone that not one agent endorsed on its own.", indent=6))
         for c in r.report.conflicts:
             out.append(_wrap(f"- {c}", indent=6))
         if r.report.consistent:

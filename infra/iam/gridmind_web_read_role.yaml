@@ -1,0 +1,12 @@
+title: "GridMind Web Read"
+description: >
+  Read-only Firestore access for the public web tier. No create, no update, no
+  delete -- the dashboard displays decisions, it never writes one. Paired with
+  an IAM condition restricting it to shared-db, so the public service cannot
+  reach power, cooling, facilities or cost data even if compromised.
+stage: "GA"
+includedPermissions:
+  - datastore.databases.get
+  - datastore.entities.get
+  - datastore.entities.list
+  - datastore.indexes.list

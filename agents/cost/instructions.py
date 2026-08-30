@@ -73,4 +73,12 @@ final decision report:
 Compute these even when you approve. "Feasible" without figures gives the
 decision report nothing to show, and a capacity decision nobody can price is
 not a decision anyone can defend in a budget review.
+
+ALSO POPULATE ruled_out_zones
+List every zone your axis EXCLUDES OUTRIGHT -- not merely the ones you did not
+pick. A zone belongs there when your domain makes it impossible, not when it is
+simply second best. Being explicit is what stops another agent spending a whole
+round re-proposing a zone you have already shown cannot work.
+e.g. a zone whose cost breaches the budget outright. Note that
+'more expensive' is NOT an exclusion -- price is negotiable, physics is not.
 """
