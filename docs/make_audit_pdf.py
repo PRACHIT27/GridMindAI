@@ -113,8 +113,8 @@ A(P("The Fortified Enterprise Fleet &nbsp;&middot;&nbsp; project "
 A(rule())
 
 A(P("Verdict", "h2"))
-A(P("<b>Four of the seven GEAP capabilities are genuinely implemented, one is "
-    "partial, and two are absent.</b> Where a capability exists it was built "
+A(P("<b>Six of the seven GEAP capabilities are implemented and one is partial.</b> "
+    "Where a capability exists it was built "
     "directly on Google Cloud primitives rather than by adopting the GEAP "
     "managed product &mdash; the behaviour is real and verifiable, but it is our "
     "implementation, not the branded service. This document states which is "
@@ -129,10 +129,12 @@ A(P("Scorecard", "h2"))
 rows = [[Paragraph(h, S["cellh"]) for h in
          ("GEAP capability", "Status", "What exists in GridMind today")]]
 data = [
-    ("Agent Registry", "bad", "NOT BUILT",
-     "No discovery or versioning catalogue. Artifact Registry stores the container "
-     "image; that is image storage, not agent discovery. Nothing lets an "
-     "organisation find an agent, read its contract, or pin a version."),
+    ("Agent Registry", "ok", "BUILT",
+     "Every agent publishes its contract, version, owner, guardrails and DATA SCOPE to "
+     "shared-db/agent_registry, discoverable at GET /api/registry and browsable in the "
+     "dashboard. Published at DEPLOY time, not self-registered: a specialist has no "
+     "write access to shared-db, and granting some would contradict the very scope its "
+     "entry advertises."),
     ("Agent Runtime", "warn", "PARTIAL",
      "Six Cloud Run services with per-agent identity, scale-to-zero and bounded "
      "max-instances. Execution is synchronous request/response, so a 60&ndash;90 s "
@@ -150,10 +152,11 @@ data = [
      "FastAPI service performing caller identity verification, routing-table policy, "
      "audience-scoped token minting, and allow/deny audit logging. The orchestrator "
      "cannot reach a specialist except through it."),
-    ("Model Armor", "bad", "NOT BUILT",
-     "Descoped during planning. No screening for prompt injection, tool poisoning or "
-     "PII leakage on inter-agent traffic. <b>The API is available in this project</b> "
-     "and the gateway is the natural integration seam."),
+    ("Model Armor", "ok", "BUILT",
+     "Screens inter-agent traffic at the gateway, inbound and outbound. Verified live: "
+     "benign engineering text passes; prompt injection, instruction override and PII all "
+     "match and are refused. FAILS CLOSED -- an unreachable filter must not silently "
+     "become an absent one."),
     ("Agent Observability", "ok", "BUILT",
      "Structured JSON to Cloud Logging, a correlation ID threaded through every agent "
      "in a decision, and the complete per-round reasoning chain persisted to "
@@ -165,9 +168,10 @@ for name, kind, label, detail in data:
 A(table(rows, [30 * mm, 26 * mm, 118 * mm]))
 
 A(Spacer(1, 8))
-A(P("Read the scorecard as 4 built / 1 partial / 2 missing. The two gaps are not "
-    "cosmetic: <b>Agent Registry is the single weakest point against this track's "
-    "stated focus</b>, which opens with the words \"corporate agent discovery\".", "p"))
+A(P("Read the scorecard as <b>6 built / 1 partial</b>. The remaining gap is Agent "
+    "Runtime: execution is synchronous, so a 60-90 s negotiation blocks its caller "
+    "rather than running as a durable async job. That is a UX and scale limitation "
+    "rather than a capability or security one.", "p"))
 
 A(PageBreak())
 
@@ -178,10 +182,12 @@ A(P("The track description names five things a submission should show. This is h
 
 rows = [[Paragraph(h, S["cellh"]) for h in ("Focus area", "Rating", "Evidence")]]
 focus = [
-    ("Corporate agent discovery", "bad", "WEAK",
-     "There is no registry. An organisation cannot discover the agents, inspect their "
-     "input/output contracts, see which data domain each is scoped to, or pin a "
-     "version. This is the clearest gap in the submission."),
+    ("Corporate agent discovery", "ok", "BUILT",
+     "A registry entry names what each agent judges, what it independently REFUSES, the "
+     "schema it speaks, and the one database it may read against the four it may not. "
+     "Publishing data scope makes the isolation claim checkable rather than assertable: "
+     "the same values drive the IAM conditions, so an entry that lied would be caught by "
+     "03_verify_isolation.sh."),
     ("Multi-agent orchestration at scale", "ok", "STRONG",
      "Five agents across six services. Round 1 runs the four specialists concurrently "
      "and independently; the orchestrator then tests whether four verdicts describe "
@@ -197,9 +203,9 @@ focus = [
      "decision emits a structured event under one correlation ID. A whole multi-agent "
      "decision is reconstructable from Cloud Logging with a single filter."),
     ("Security posture enforcement", "ok", "STRONGEST",
-     "Four independent layers &mdash; identity, network, data, audit &mdash; each "
-     "demonstrated by a real denial rather than described. Weakened only by the "
-     "absence of Model Armor at the content layer."),
+     "Five independent layers &mdash; identity, network, data, content and audit &mdash; "
+     "each demonstrated by a real denial rather than described. Input hardening closes "
+     "the free-text channel; Model Armor screens what remains."),
 ]
 for name, kind, label, detail in focus:
     rows.append([Paragraph(f"<b>{name}</b>", S["cellb"]), badge(label, kind),
