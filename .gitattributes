@@ -7,3 +7,10 @@
 *.py text eol=lf
 *.yaml text eol=lf
 Dockerfile text eol=lf
+
+# Binary. Without this git applies CRLF conversion on checkout and silently
+# corrupts them -- a PDF that opens fine here and is unreadable after a clone.
+*.pdf binary
+*.png binary
+*.jpg binary
+*.drawio binary
