@@ -55,8 +55,8 @@ h1 .g{background:linear-gradient(100deg,#fff 8%,var(--cy) 48%,var(--vi) 92%);
 .stat .l{font-size:11px;text-transform:uppercase;letter-spacing:.11em;color:var(--dimmer);margin-top:2px}
 
 /* ---------- layout ---------- */
-.cols{display:grid;grid-template-columns:1fr 372px;gap:20px;align-items:start;margin-top:34px}
-@media(max-width:1080px){.cols{grid-template-columns:1fr}}
+.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+label{margin-top:0}
 
 .panel{background:var(--glass);border:1px solid var(--line);border-radius:var(--r);
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
@@ -229,138 +229,103 @@ footer{margin-top:44px;padding-top:22px;border-top:1px solid var(--line);
   </div>
 </header>
 
-<div class="cols">
-  <main>
-    <div class="tabbar">
-      <button id="t-live" class="on">Negotiate</button>
-      <button id="t-hist">Decision history</button>
-      <button id="t-reg">Agent registry</button>
+<div class="tabbar">
+  <button id="t-new" class="on">New request</button>
+  <button id="t-hist">Decision history</button>
+  <button id="t-reg">Agent registry</button>
+</div>
+
+<div id="view-new">
+  <div class="panel">
+    <h2>Submit a workload request</h2>
+    <div class="seg" style="max-width:340px">
+      <button id="tab-preset" class="on">From the queue</button>
+      <button id="tab-custom">Build your own</button>
     </div>
 
-    <div id="view-live">
-    <div class="panel">
-      <h2>Facility iad-dc-01 · Ashburn, Virginia</h2>
-      <div class="zones" id="zonemap"></div>
-      <div class="hint" id="zonehint">
-        Four zones, 464 racks, 32.9&nbsp;MW IT load. Run a negotiation and watch zones get
-        eliminated — each by a different agent, for a reason only that agent can see.
-      </div>
+    <div id="pane-preset">
+      <label for="wl">Workload</label>
+      <select id="wl"></select>
     </div>
 
-    <div id="stage"></div>
-
-    </div><!-- /view-live -->
-
-    <div id="view-hist" style="display:none">
-      <div class="panel">
-        <h2>Every decision this system has made</h2>
-        <p class="hint" style="margin:0 0 14px">
-          Read straight from <span class="mono">shared-db/negotiation_log</span> — the
-          same audit record the orchestrator writes. Open one to replay its rounds, or
-          download the signed decision report as a PDF.
-        </p>
-        <table id="past"><tbody><tr><td class="mono" style="color:var(--dimmer)">loading…</td></tr></tbody></table>
+    <div id="pane-custom" style="display:none">
+      <div class="formgrid">
+        <div><label for="f-gpu">Hardware</label>
+          <select id="f-gpu">
+            <option value="GB200|GB200 NVL72|132|1360">GB200 NVL72 &mdash; 132 kW, 1360 kg</option>
+            <option value="B200|B200 rack|70|1150">B200 &mdash; 70 kW, 1150 kg</option>
+            <option value="H200|H200 rack|38|950">H200 &mdash; 38 kW, 950 kg</option>
+            <option value="H100|H100 rack|34|900">H100 &mdash; 34 kW, 900 kg</option>
+          </select></div>
+        <div><label for="f-racks">Racks</label><input id="f-racks" type="number" value="6" min="1" max="24"></div>
+        <div><label for="f-kw">kW / rack</label><input id="f-kw" type="number" value="132" min="5" max="200"></div>
+        <div><label for="f-kg">Weight (kg)</label><input id="f-kg" type="number" value="1360" min="200" max="2000"></div>
+        <div><label for="f-wk">Weeks</label><input id="f-wk" type="number" value="8" min="1" max="52"></div>
+        <div><label for="f-cool">Cooling</label>
+          <select id="f-cool">
+            <option value="direct_to_chip_liquid">Direct-to-chip liquid</option>
+            <option value="air">Air</option>
+          </select></div>
       </div>
-
-      <div class="panel">
-        <h2>Memory bank — precedents drawn on by later decisions</h2>
-        <p class="hint" style="margin:0 0 12px">
-          Multi-round resolutions are written back as precedent. The orchestrator looks
-          one up by conflict type before reconciling, so the system gets better at
-          conflicts it has seen before.
-        </p>
-        <div id="mem" style="font-size:12.5px;color:var(--dim)">loading…</div>
-      </div>
-    </div><!-- /view-hist -->
-
-    <div id="view-reg" style="display:none">
-      <div class="panel">
-        <h2>Agent registry — discovery, contracts and data scope</h2>
-        <p class="hint" style="margin:0 0 16px">
-          Published to <span class="mono">shared-db/agent_registry</span> at deploy time.
-          Each entry declares what the agent judges, what it refuses, the schema it
-          speaks, and — the load-bearing part — the single database it can read and the
-          four it cannot. Those values drive the IAM conditions, so an entry that lied
-          would be caught by <span class="mono">03_verify_isolation.sh</span>.
-        </p>
-        <div id="registry">loading…</div>
-      </div>
-    </div><!-- /view-reg -->
-  </main>
-
-  <aside>
-    <div class="panel">
-      <h2>Submit a request</h2>
-      <div class="seg">
-        <button id="tab-preset" class="on">Queued request</button>
-        <button id="tab-custom">Build your own</button>
-      </div>
-
-      <div id="pane-preset">
-        <label for="wl">Workload from the queue</label>
-        <select id="wl"></select>
-      </div>
-
-      <div id="pane-custom" style="display:none">
-        <div class="row2">
-          <div><label for="f-racks">Racks</label><input id="f-racks" type="number" value="6" min="1" max="24"></div>
-          <div><label for="f-kw">kW per rack</label><input id="f-kw" type="number" value="132" min="5" max="200"></div>
-        </div>
-        <div class="row2">
-          <div><label for="f-kg">Rack weight (kg)</label><input id="f-kg" type="number" value="1360" min="200" max="2000"></div>
-          <div><label for="f-wk">Duration (weeks)</label><input id="f-wk" type="number" value="8" min="1" max="52"></div>
-        </div>
-        <label for="f-cool">Cooling required</label>
-        <select id="f-cool">
-          <option value="direct_to_chip_liquid">Direct-to-chip liquid</option>
-          <option value="air">Air</option>
-        </select>
-        <label for="f-gpu">Hardware</label>
-        <select id="f-gpu">
-          <option value="GB200|GB200 NVL72|132|1360">GB200 NVL72 — 132 kW, 1360 kg</option>
-          <option value="B200|B200 rack|70|1150">B200 — 70 kW, 1150 kg</option>
-          <option value="H200|H200 rack|38|950">H200 — 38 kW, 950 kg</option>
-          <option value="H100|H100 rack|34|900">H100 — 34 kW, 900 kg</option>
-        </select>
-        <div class="derived" id="derived">Total draw <b>792 kW</b> · needs <b>~80</b> circuits at 10 kW each</div>
-      </div>
-
-      <label for="sc">External conditions</label>
-      <select id="sc">
-        <option value="normal">Normal</option>
-        <option value="grid_stress">Grid emergency — PJM curtailment</option>
-        <option value="heatwave">Heatwave — 35–40 °C, no free cooling</option>
-        <option value="crew_shortage">Crew shortage — few certified techs</option>
-        <option value="freight_delay">Freight delay — port congestion</option>
-      </select>
-
-      <label for="key">Demo key <span style="text-transform:none;letter-spacing:0;color:var(--dimmer)">— optional, skips the rate limit</span></label>
-      <input id="key" type="password" placeholder="leave blank to run as a visitor">
-
-      <button class="go" id="run">Run the negotiation</button>
-      <div class="hint">
-        Five agents, live against Gemini 3.5, up to three rounds — 60–90 seconds.
-        Each run costs real money, so visitors get one per 90 s. Reading past decisions
-        is unlimited.
-      </div>
+      <div class="derived" id="derived"></div>
     </div>
 
-    <div class="panel">
-      <h2>What each service can reach</h2>
-      <div class="lock"><b>power</b><span>power-db <span class="yes">✓</span> · rest <span class="no">403</span></span></div>
-      <div class="lock"><b>cooling</b><span>cooling-db <span class="yes">✓</span> · rest <span class="no">403</span></span></div>
-      <div class="lock"><b>facilities</b><span>facilities-db <span class="yes">✓</span> · rest <span class="no">403</span></span></div>
-      <div class="lock"><b>cost</b><span>cost-db <span class="yes">✓</span> · rest <span class="no">403</span></span></div>
-      <div class="lock"><b>orchestrator</b><span><span class="no">no facility data at all</span></span></div>
-      <div class="lock"><b>this site</b><span>shared-db, <span class="no">read-only</span></span></div>
-      <div class="hint">
-        Enforced by IAM Conditions on Firestore. Security Rules don't apply to server-side
-        Admin SDK access, so scoping each service account to one database is the only
-        thing that actually holds. The public tier holds the least privilege in the system.
-      </div>
+    <div class="formgrid" style="margin-top:14px">
+      <div><label for="sc">External conditions</label>
+        <select id="sc">
+          <option value="normal">Normal</option>
+          <option value="grid_stress">Grid emergency &mdash; PJM curtailment</option>
+          <option value="heatwave">Heatwave &mdash; 35&ndash;40 &deg;C, no free cooling</option>
+          <option value="crew_shortage">Crew shortage &mdash; few certified techs</option>
+          <option value="freight_delay">Freight delay &mdash; port congestion</option>
+        </select></div>
+      <div><label for="key">Demo key <span style="text-transform:none;letter-spacing:0;color:var(--dimmer)">&mdash; optional</span></label>
+        <input id="key" type="password" placeholder="skips the rate limit"></div>
+      <div style="display:flex;align-items:flex-end">
+        <button class="go" id="run" style="margin-top:0">Run the negotiation</button></div>
     </div>
+    <div class="hint">
+      Five agents, live against Gemini 3.5, up to three rounds &mdash; 60&ndash;90 seconds.
+      Each run costs real Gemini calls, so visitors get one per 90 s.
+    </div>
+  </div>
 
-  </aside>
+  <div class="panel">
+    <h2>Facility iad-dc-01 &middot; Ashburn, Virginia</h2>
+    <div class="zones" id="zonemap"></div>
+    <div class="hint" id="zonehint">
+      Four zones, 464 racks, 32.9 MW IT load. Run a negotiation and watch zones get
+      eliminated &mdash; each by a different agent, for a reason only that agent can see.
+    </div>
+  </div>
+
+  <div id="stage"></div>
+</div>
+
+<div id="view-hist" style="display:none">
+  <div class="panel">
+    <h2>Every decision this system has made</h2>
+    <p class="hint" style="margin:0 0 14px">
+      Read straight from <span class="mono">shared-db/negotiation_log</span> &mdash; the same
+      audit record the orchestrator writes. Open one to replay its rounds, or download
+      the decision report as a PDF.
+    </p>
+    <table id="past"><tbody><tr><td class="mono" style="color:var(--dimmer)">loading&hellip;</td></tr></tbody></table>
+  </div>
+</div>
+
+<div id="view-reg" style="display:none">
+  <div class="panel">
+    <h2>Agent registry &mdash; discovery, contracts and data scope</h2>
+    <p class="hint" style="margin:0 0 16px">
+      Published to <span class="mono">shared-db/agent_registry</span> at deploy time. Each
+      entry declares what the agent judges, what it refuses, the schema it speaks, and
+      &mdash; the load-bearing part &mdash; the single database it can read and the four it
+      cannot. Those values drive the IAM conditions, so an entry that lied would be caught
+      by <span class="mono">03_verify_isolation.sh</span>.
+    </p>
+    <div id="registry">loading&hellip;</div>
+  </div>
 </div>
 
 <footer>
@@ -527,6 +492,9 @@ function decisionBlock(d,n,cid){
         :(e.efficiency_note?`<div class="st">Efficiency</div><div class="rsn">${esc(e.efficiency_note)}</div>`:'')}
       ${e.stranded_capacity_avoided?`<div class="st">Stranded capacity avoided</div>
         <div class="rsn">${esc(e.stranded_capacity_avoided)}</div>`:''}
+      ${d.precedent_applied?`<div class="st">Precedent applied</div>
+        <div class="rsn">Drew on <span class="mono">${esc(d.precedent_applied)}</span> from the
+        Memory Bank &mdash; a past conflict of the same shape, recalled before reconciling.</div>`:''}
       ${(d.unresolved_conflicts||[]).length?`<div class="st" style="color:var(--warn)">Unresolved — needs a human</div>
         <ul>${d.unresolved_conflicts.map(c=>`<li>${esc(c)}</li>`).join('')}</ul>`:''}
     </div></div>`;
@@ -625,7 +593,7 @@ async function loadPast(){
        :`<tr><td colspan="7" style="color:var(--dimmer)">No decisions yet — run one.</td></tr>`)+`</tbody>`;
     document.querySelectorAll('#past tr.clk').forEach(tr=>tr.onclick=async()=>{
       const n=await api('/api/decisions/'+tr.dataset.id);
-      showTab('live');
+      showTab('new');
       reveal({decision:n.decision,rounds:n.rounds,correlation_id:n.correlation_id});
     });
   }catch(e){$('#past').innerHTML=`<tbody><tr><td class="err">${esc(e.message)}</td></tr></tbody>`}
@@ -637,13 +605,6 @@ async function boot(){
     $('#wl').innerHTML=w.map(x=>`<option value="${esc(x.workload_id)}">${
       esc(`${x.racks_required}× ${x.rack_type||x.gpu_model} · ${x.total_power_kw} kW`)}</option>`).join('');
   }catch{$('#wl').innerHTML='<option>queue unavailable</option>'}
-  try{
-    const m=await api('/api/memory');
-    $('#mem').innerHTML=m.length?m.slice(0,3).map(x=>`<div style="margin-bottom:11px">
-      <div class="mono" style="font-size:10.5px;color:var(--dimmer)">${esc(x.conflict_type||'')}</div>
-      ${esc((x.lesson||x.summary||'').slice(0,200))}</div>`).join('')
-      :'No precedents recorded yet.';
-  }catch{$('#mem').textContent='unavailable'}
   syncDerived(); loadPast();
 }
 function agentCardReg(a){
@@ -688,10 +649,10 @@ async function loadRegistry(){
 }
 
 function showTab(which){
-  $('#view-live').style.display=which==='live'?'':'none';
+  $('#view-new').style.display =which==='new' ?'':'none';
   $('#view-hist').style.display=which==='hist'?'':'none';
   $('#view-reg').style.display =which==='reg' ?'':'none';
-  $('#t-live').classList.toggle('on',which==='live');
+  $('#t-new').classList.toggle('on',which==='new');
   $('#t-hist').classList.toggle('on',which==='hist');
   $('#t-reg').classList.toggle('on',which==='reg');
   if(which==='hist') loadPast();
@@ -700,7 +661,7 @@ function showTab(which){
   // reader into empty space below the shorter one.
   window.scrollTo({top:0,behavior:'smooth'});
 }
-$('#t-live').onclick=()=>showTab('live');
+$('#t-new').onclick=()=>showTab('new');
 $('#t-hist').onclick=()=>showTab('hist');
 $('#t-reg').onclick=()=>showTab('reg');
 
