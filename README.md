@@ -85,22 +85,7 @@ Regenerate with `python docs/make_architecture_svg.py` — the diagram is genera
 from a script rather than drawn by hand, so a service or database rename shows up
 as a diff instead of as a diagram quietly describing last week's system.
 
-```
-   request
-      │
-      ▼
- ┌──────────┐     ┌──────────────┐     ┌───────────────────────────┐
- │ ORCHEST- │────▶│   GATEWAY    │────▶│  power / cooling /        │
- │  RATOR   │     │ routing +    │     │  facilities / cost agents │
- └────┬─────┘     │ audit log    │     └────────────┬──────────────┘
-      │           └──────────────┘                  │
-      ▼                                             ▼
-  shared-db                            power-db  cooling-db
-  (queue, negotiation log,             facilities-db  cost-db
-   memory bank)                        (one per agent, IAM-isolated)
-```
-
-Six Cloud Run services, six service accounts, five Firestore databases.
+Seven Cloud Run services, seven service accounts, five Firestore databases.
 
 ### Security is enforced, not described
 
