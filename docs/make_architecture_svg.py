@@ -207,13 +207,31 @@ for i, (cx, name, sa, l1, l2) in enumerate(COLS):
 
 # stores
 DY = 1450
-for cx, name, *_ in COLS:
+for i, (cx, name, *_) in enumerate(COLS):
     node(cx, DY, "firestore", f"{name.lower()}-db", "this assessor only",
          "every other identity → 403", size=44, color=GRN, w=260)
-    edge([(cx, AY + 96), (cx, DY - 26)], "", color=GRN, sw=1.5)
-txt(340, DY + 112, "each reads its own store and nothing else — the boundary is an IAM "
-                   "condition on the store itself, not a check in our code",
-    size=11.5, fill=GRN, anchor="start")
+    # The label goes on the first edge only; repeating it four times would
+    # crowd the row without saying anything new.
+    edge([(cx, AY + 96), (cx, DY - 26)],
+         "Firestore checks the caller's" if i == 0 else "",
+         "identity on every request" if i == 0 else "",
+         color=GRN, sw=1.5, lx=cx - 118, ly=DY - 96)
+
+# A denied read, drawn rather than described. Without this the "denied by
+# policy" key has nothing to point at, and the isolation reads as an assertion.
+edge([(408, DY - 44), (520, DY - 12), (556, DY - 4)],
+     "403 — refused by the database itself,", "not by any check we wrote",
+     color=RED, dash="6 4", sw=1.7, lx=530, ly=DY - 78)
+txt(408, DY - 56, "power assessor → cooling-db", size=10, fill=RED, anchor="start")
+
+# Where the identity decision actually happens.
+A(gcp_icons.use("iam", 340, DY + 104, 24))
+txt(372, DY + 121, "The identity check happens AT THE STORE. Each service account is bound "
+                   "by an IAM condition on resource.name, so a cross-domain read is "
+                   "refused by Firestore —",
+    size=11.5, fill=INK, anchor="start")
+txt(372, DY + 139, "before it reaches any of our code. Deleting the application entirely "
+                   "would not open it.", size=11.5, fill=GRN, anchor="start")
 
 # model inference
 node(1590, 1150, "vertex-ai", "Vertex AI · Gemini 3.5",

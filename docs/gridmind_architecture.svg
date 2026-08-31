@@ -150,6 +150,9 @@
 <text x="340" y="1509.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">this assessor only</text>
 <text x="340" y="1523.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">every other identity → 403</text>
 <path d="M 340 1246 L 340 1424" stroke="#34d399" stroke-width="1.5" fill="none" marker-end="url(#mGrn)" stroke-linejoin="round"/>
+<rect x="125.275" y="1341" width="193.45" height="32" rx="4" fill="#12161c" opacity="0.96"/>
+<text x="222" y="1354" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#34d399" font-weight="400" text-anchor="middle">Firestore checks the caller's</text>
+<text x="222" y="1367" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#34d399" font-weight="400" text-anchor="middle">identity on every request</text>
 <use href="#ic-firestore" x="638.0" y="1428.0" width="44" height="44"/>
 <rect x="530.0" y="1480.0" width="260" height="48" rx="5" fill="#1b212a" opacity="0.94"/>
 <text x="660" y="1494.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#34d399" font-weight="700" text-anchor="middle">cooling-db</text>
@@ -168,7 +171,14 @@
 <text x="1300" y="1509.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">this assessor only</text>
 <text x="1300" y="1523.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">every other identity → 403</text>
 <path d="M 1300 1246 L 1300 1424" stroke="#34d399" stroke-width="1.5" fill="none" marker-end="url(#mGrn)" stroke-linejoin="round"/>
-<text x="340" y="1562" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#34d399" font-weight="400" text-anchor="start">each reads its own store and nothing else — the boundary is an IAM condition on the store itself, not a check in our code</text>
+<path d="M 408 1406 L 520 1438 L 556 1446" stroke="#f87171" stroke-width="1.7" fill="none" marker-end="url(#mRed)" stroke-linejoin="round" stroke-dasharray="6 4"/>
+<rect x="409.075" y="1359" width="241.85" height="32" rx="4" fill="#12161c" opacity="0.96"/>
+<text x="530" y="1372" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#f87171" font-weight="400" text-anchor="middle">403 — refused by the database itself,</text>
+<text x="530" y="1385" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#f87171" font-weight="400" text-anchor="middle">not by any check we wrote</text>
+<text x="408" y="1394" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#f87171" font-weight="400" text-anchor="start">power assessor → cooling-db</text>
+<use href="#ic-iam" x="340" y="1554" width="24" height="24"/>
+<text x="372" y="1571" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#eef2f7" font-weight="400" text-anchor="start">The identity check happens AT THE STORE. Each service account is bound by an IAM condition on resource.name, so a cross-domain read is refused by Firestore —</text>
+<text x="372" y="1589" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#34d399" font-weight="400" text-anchor="start">before it reaches any of our code. Deleting the application entirely would not open it.</text>
 <use href="#ic-vertex-ai" x="1564.0" y="1124.0" width="52" height="52"/>
 <rect x="1465.0" y="1184.0" width="250" height="62" rx="5" fill="#1b212a" opacity="0.94"/>
 <text x="1590" y="1198.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#a78bfa" font-weight="700" text-anchor="middle">Vertex AI · Gemini 3.5</text>
