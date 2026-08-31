@@ -1,175 +1,216 @@
 # Demo video script — 4 minutes
 
+Follows `GridMind_Submission_Deck.pptx` slide for slide, then one live demo at
+the end. Deck for 0:00–2:50, screen share for 2:50–3:45, back to the deck to close.
+
 **Live:** https://gridmind-wuvfpvopoq-uk.a.run.app
-**Access key** (skips the rate limit — have it pasted in before recording): `611d3791b072090476d04a81`
+**Access key** (skips the rate limit — paste it in *before* you record):
+`611d3791b072090476d04a81`
 
 ## Before you hit record
 
 ```bash
-# 1. Wake the services so nothing cold-starts on camera (each takes ~10s otherwise)
 curl -s -o /dev/null https://gridmind-wuvfpvopoq-uk.a.run.app/api/decisions
-
-# 2. Confirm the whole chain is alive — do NOT skip this
-bash infra/iam/03_verify_isolation.sh          # expect: ISOLATION VERIFIED
-python -m scripts.demo_guardrails              # expect: 6/6
 ```
 
-Have these open in tabs, in this order:
+That wakes the services so nothing cold-starts on camera. Then confirm the chain
+is alive — do not skip this:
 
-1. The dashboard, on **New assessment**
-2. A terminal, cleared, in the repo root
-3. Cloud Run console — the services list
-4. Cloud Logging, with a correlation id already filtered
+```bash
+bash infra/iam/03_verify_isolation.sh
+```
 
-**Record at 1920×1080.** The zone map and the round cards are the two things that
-must be legible; everything else can be small.
+```bash
+python -m scripts.demo_guardrails
+```
+
+Expect `ISOLATION VERIFIED` and `6/6`.
+
+Have exactly three things open, in this order, and nothing else:
+
+1. The deck, full screen, on slide 1
+2. The dashboard, on **New assessment**, key already pasted, 6× GB200 selected
+3. A terminal, cleared, in the repo root
+
+**Record at 1920×1080.** The round-one verdict chips and the zone map are the
+two things that must be legible.
 
 ---
 
-## 0:00 – 0:35 · The problem
+## The deck · 0:00 – 2:52
 
-> *"A data centre operator gets a request: six racks of GB200s. Before anyone can
-> say yes, four separate teams have to check four different things — is there
-> power, can we cool it, is there floor space, can we afford it."*
+Timings are per slide. The words below are what to say, not a paragraph to read
+— each slide's speaker notes carry the same beat if you lose your place.
+
+### Slide 1 · Title · 0:00 – 0:10
+
+> *"This is GridMind. It decides where a new high-density workload can go inside
+> a data center, by checking power, cooling, floor space and budget at the same
+> time."*
+
+### Slide 2 · The problem · 0:10 – 0:38
+
+> *"Right now four teams own those four answers, and the request moves from one
+> inbox to the next over several days."*
 >
-> *"Today that happens in four inboxes over several days. And here's the failure
-> nobody catches: all four teams can say yes, correctly, and still describe a plan
-> that cannot be built — because each was looking at a different room."*
+> *"The failure nobody catches isn't that a team gets it wrong. It's that all
+> four can be right and still describe a plan that cannot be built, because each
+> was looking at a different room. The industry calls what's left behind stranded
+> capacity — megawatts you've paid for and can't use."*
 
-**On screen:** the landing page. Let the headline sit for a beat.
+### Slide 3 · What it's worth · 0:38 – 1:00
 
-> *"GridMind checks all four together, in about a minute, and writes down why."*
+> *"For the operations team placing that workload, GridMind returns one plan
+> clearing all four constraints at once, in about ninety seconds instead of days,
+> with a report showing what each assessor was shown beside what it concluded."*
+>
+> *"Nobody in the current process computes that joint check, because no team can
+> see outside its own data."*
 
----
+### Slide 4 · What it does · 1:00 – 1:14
 
-## 0:35 – 1:50 · The assessment, live
+> *"A request goes in as a form. Four assessors run in parallel, each reading
+> only its own database. The orchestrator checks whether their four answers
+> describe a single buildable plan. Out comes a decision and a report."*
 
-**Do:** paste the access key, leave the queued 6× GB200 request selected, hit
-**Check feasibility.**
+### Slide 5 · The conflict · 1:14 – 1:40
 
-While it runs (60–90 s), talk over it:
+> *"Here's a real run. Six racks of GB200s — 792 kilowatts, liquid cooled."*
+>
+> *"Power says zone A. Cooling says zone C. Facilities and cost both say zone
+> B."*
 
-> *"Four agents are running right now, in parallel, on separate Cloud Run
-> services. Each one can read exactly one database — the power agent physically
-> cannot open the cooling data. That's not a policy we wrote in code, it's an IAM
-> condition on the store itself."*
+**Pause here for a beat. Let the three different zones land.**
 
-**When round 1 lands — this is the moment. Stop talking and point at it:**
+> *"Every one of those is correct on its own axis. Together they're three
+> different rooms and no plan at all. A system that counted votes would see four
+> approvals and place the order."*
 
-| Agent | Zone |
-|---|---|
-| Power | `zone-a` |
-| Cooling | `zone-c` |
-| Facilities | `zone-b` |
-| Cost | `zone-b` |
+### Slide 6 · How it resolves · 1:40 – 2:16
 
-> *"Four answers. Every one correct on its own axis. Together they describe
-> nothing — three different rooms."*
+> *"So the orchestrator doesn't count votes. It detects the conflict in ordinary
+> code — whether two zone ids differ is not a judgement call — then opens a
+> negotiation round with each assessor's position attached to the others'."*
+>
+> *"In round two, facilities volunteers a retrofit it hadn't mentioned. Cost
+> re-prices one rack instead of six. Three rounds maximum, then it escalates
+> rather than picking a winner."*
+>
+> *"Every assessor also reports what its axis rules out. Intersect those four
+> lists and one zone survives — zone C. In round one, nobody had picked it."*
 
-**Then point at the exclusion line under the round:**
+### Slide 7 · Under the hood · 2:16 – 2:42
 
-> *"But look at what they each rule OUT. Cooling kills A, B and D. Power kills B
-> and D. Intersect the four lists and exactly one room survives — zone C. And in
-> round one, not a single agent had picked it."*
+> *"Underneath: seven Cloud Run services, seven identities, five separate
+> databases. The power assessor physically cannot open the cooling data — that's
+> an IAM condition on the store, not a check in our code."*
+>
+> *"The rest is a line each. Guardrails re-check every verdict against the figures
+> it was handed. Three retries with the violation fed back, then it refuses.
+> Model Armor screens agent traffic both ways."*
 
-**Watch the zone map dim** as the eliminated zones grey out.
+### Slide 8 · Deployed · 2:42 – 2:52
 
-> *"That's the whole idea. No individual team could compute that, because no
-> individual team can see the other three."*
-
----
-
-## 1:50 – 2:35 · The decision and the audit trail
-
-**On screen:** the decision panel.
-
-> *"Zone C, five liquid-ready racks plus one retrofitted, fourteen hours' delay,
-> forty-eight thousand in capex. And it names which agent unlocked it —
-> Facilities knew about the retrofit; Cost had assumed all six racks needed one
-> and priced it at two hundred and eighty-eight thousand."*
-
-**Do:** click **Download report (PDF)**. Scroll to the **evidence** section.
-
-> *"This is the part an operator actually needs. Everything above is what the
-> agents said. This is what they were shown — the exact figures each one was
-> handed, recorded by the system, not self-reported by the model. So you can
-> check the reasoning against the data."*
-
-Point at one row: *"Zone B, 560 kW of headroom against a 792 kW request. The
-agent's sentence and the number it was given, side by side."*
+> *"Twenty-one security checks, seven services, six of the seven platform
+> capabilities. And the facility is simulated — the agents, the infrastructure
+> and every denial are real."*
 
 ---
 
-## 2:35 – 3:20 · Security, in a terminal
+## The demo · 2:52 – 3:43
 
-**Do:** run it live.
+Switch to the dashboard. **One take, no cuts.**
+
+### Start it · 2:52 – 3:01
+
+**Do:** hit **Check feasibility** on the queued 6× GB200 request.
+
+> *"Let me run it. Four agents starting in parallel, on four separate
+> services."*
+
+### Fill the wait with the security proof · 3:01 – 3:25
+
+**This is the tight part of the video.** The assessment takes 60–90 seconds and
+you have about 40 before you need the result on screen, so the terminal has to
+carry the gap. **Switch to it and run:**
 
 ```bash
 bash scripts/demo_denial.sh
 ```
 
-> *"Three layers, and none of these refusals come from our code."*
+> *"While that runs — none of these refusals come from our code. The power agent
+> asking for cost data gets a 403 straight from Firestore. Every agent from the
+> internet gets a 404: not rejected, unreachable."*
+>
+> *"Delete every check we wrote and these still hold."*
 
-- **Data:** `power-agent-sa` → `cost-db` = **403**. Firestore itself refuses.
-- **Network:** every agent = **404** from the internet. Not rejected — unreachable.
-- **Content:** Model Armor blocks prompt injection, jailbreak and PII on the way in
-  *and* the way out.
+That's about 17 seconds of talking over a script that takes longer than that to
+finish. **Let it scroll in silence.** Twenty-one checks going green unattended is
+better television than filler narration, and it is the unedited live execution
+the rubric asks for.
 
-> *"The orchestrator is bound to one store and cannot read any facility data at
-> all. So 'it only sees the agents' verdicts' isn't a promise in a README — it's
-> a property of the platform. Delete our checks and these still hold."*
+**Do not switch back until the dashboard has a decision.** Cutting to a spinner
+costs you more than the extra seconds do.
 
-**Worth saying if you have the second:**
+> **Safer alternative if you'd rather not race the clock:** hit **Check
+> feasibility** just before slide 7 instead, leave the tab in the background, and
+> the result is waiting when you reach the demo. You lose nothing — the run is
+> still live and unedited, it just starts forty seconds earlier.
 
-> *"And the most exposed service holds the least. The public web tier is
-> read-only, one store, and has no permission to call a model at all."*
+### Back to the result · 3:25 – 3:43
+
+**Switch back to the dashboard.** Round one should be on screen.
+
+> *"There's the conflict, live. Three different rooms."*
+
+**Point at the exclusion line, then the zone map dimming.**
+
+> *"And the decision: zone C. Five liquid-ready racks plus one retrofit, fourteen
+> hours of delay, forty-eight thousand instead of two hundred and eighty-eight."*
+
+**Do:** click **Download report (PDF)**, scroll to the **evidence** section.
+
+> *"And this is what an operator needs. Not what the agents said — what they were
+> shown. The figures each one was handed, recorded by the system rather than
+> reported by the model."*
 
 ---
 
-## 3:20 – 4:00 · Proof it's really on GCP
+## Slide 9 · Close · 3:43 – 3:50
 
-**Do:** Cloud Run console → the seven services, each with its own service account.
+Switch back to the deck.
 
-> *"Seven services, seven identities, five isolated databases."*
-
-**Do:** Cloud Logging, filtered on the correlation id from the run you just did.
-
-```
-jsonPayload.correlation_id="gm-..."
-```
-
-> *"And one id threads the whole decision — every model call, every guardrail
-> check, every screening result, every allow and deny. A capacity decision you
-> can reconstruct months later."*
-
-**Close:**
-
-> *"Built on Gemini 3.5, Cloud Run and Firestore. Six of the seven Gemini
-> Enterprise Agent Platform capabilities, with the security enforced by the
-> platform rather than described in a slide."*
+> *"Four correct answers still add up to nothing unless something checks them
+> together. That's GridMind."*
 
 ---
 
 ## Things to avoid
 
-- **Don't apologise for the simulated facility.** State it once, plainly, if it
-  comes up: the facility is simulated, the agents and the infrastructure are real.
-- **Don't read the agent reasoning aloud** — it's long. Point at the verdict
-  chips and the zone map instead.
-- **Don't run an assessment without the key.** The rate limiter will refuse a
-  second run within 90 seconds and it looks like a fault.
-- **Don't demo the 2-rack request.** Two zones are genuinely viable there and it
-  escalates rather than picking — defensible, but it needs explaining and you
-  don't have the seconds.
+- **Don't run the assessment without the key pasted.** The limiter refuses a
+  second run inside 90 seconds and it looks like a fault.
+- **Don't demo the 2-rack request.** Two zones are genuinely viable there, so it
+  escalates rather than deciding. Defensible, but it needs explaining and you do
+  not have the seconds.
+- **Don't read the agent reasoning aloud.** It's long. Point at the verdict chips
+  and the zone map instead.
+- **Don't apologise for the simulated facility.** Slide 8 states it once. Leave
+  it there.
+- **Don't narrate the deck's six under-the-hood boxes.** Say the shape, let the
+  slide carry the detail.
 
 ## If something fails on camera
 
-The system fails *safe*, so a broken dependency shows up as **`ESCALATED`**
-rather than a crash or a wrong answer. If that happens, use it:
+The system fails safe, so a broken dependency shows up as **`ESCALATED`** rather
+than a crash or a wrong answer. Use it:
 
-> *"That's the fail-safe. When an agent can't produce a trustworthy answer, the
-> system refuses and escalates rather than guessing — which is exactly what you
-> want from something deciding where megawatts go."*
+> *"That's the fail-safe. When an assessor can't produce an answer it trusts, the
+> system refuses and escalates instead of guessing — which is what you want from
+> something deciding where megawatts go."*
 
-Then cut to a saved decision from the **History** tab, which reads from the
-stored record and needs nothing live.
+Then open the **History** tab and walk a stored decision. It reads from the
+recorded result and needs nothing live.
+
+If the run is still spinning at 3:30, stop waiting and go to **History** — the
+stored 6× GB200 decision shows the identical round-one conflict and the same
+final plan.
