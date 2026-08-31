@@ -79,6 +79,12 @@ No single agent could have found that plan.
 
 ## Architecture
 
+![GridMind architecture and request workflow](docs/gridmind_architecture.svg)
+
+Regenerate with `python docs/make_architecture_svg.py` — the diagram is generated
+from a script rather than drawn by hand, so a service or database rename shows up
+as a diff instead of as a diagram quietly describing last week's system.
+
 ```
    request
       │

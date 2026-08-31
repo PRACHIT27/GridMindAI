@@ -1,0 +1,240 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1840" height="1760" viewBox="0 0 1840 1760" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif">
+<rect width="1840" height="1760" fill="#ffffff"/>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1a73e8"/></marker>
+<marker id="arrowGrn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#0f9d58"/></marker>
+<marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d93025"/></marker>
+<marker id="arrowAmb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#f29900"/></marker>
+<marker id="arrowVio" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7b3ff2"/></marker>
+<marker id="arrowTeal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00838f"/></marker>
+<marker id="arrowDim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8b9aab"/></marker>
+</defs>
+<text x="50" y="52" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="30" fill="#101720" font-weight="700" text-anchor="start">GridMind — Capacity Allocation Orchestrator</text>
+<text x="50" y="78" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="14" fill="#5f6f80" font-weight="400" text-anchor="start">Architecture and request workflow  ·  Google Cloud project gridmindai-507000  ·  region us-east4</text>
+<line x1="1180" y1="40" x2="1206" y2="40" stroke="#1a73e8" stroke-width="2.6"/>
+<text x="1214" y="44" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#5f6f80" font-weight="400" text-anchor="start">request / control flow</text>
+<line x1="1180" y1="60" x2="1206" y2="60" stroke="#0f9d58" stroke-width="2.6"/>
+<text x="1214" y="64" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#5f6f80" font-weight="400" text-anchor="start">permitted data read</text>
+<line x1="1180" y1="80" x2="1206" y2="80" stroke="#d93025" stroke-width="2.6"/>
+<text x="1214" y="84" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#5f6f80" font-weight="400" text-anchor="start">denied by policy</text>
+<line x1="1410" y1="40" x2="1436" y2="40" stroke="#f29900" stroke-width="2.6"/>
+<text x="1444" y="44" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#5f6f80" font-weight="400" text-anchor="start">content screening</text>
+<line x1="1410" y1="60" x2="1436" y2="60" stroke="#7b3ff2" stroke-width="2.6"/>
+<text x="1444" y="64" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#5f6f80" font-weight="400" text-anchor="start">model inference</text>
+<line x1="1410" y1="80" x2="1436" y2="80" stroke="#00838f" stroke-width="2.6"/>
+<text x="1444" y="84" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#5f6f80" font-weight="400" text-anchor="start">telemetry</text>
+<rect x="40" y="108" width="1760" height="148" rx="12" fill="#f4f7fb" stroke="#c9d4e0" stroke-width="1.4"/>
+<text x="60" y="134" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#8b9aab" font-weight="700" text-anchor="start" letter-spacing="1.6">PUBLIC INTERNET</text>
+<rect x="70" y="150" width="210" height="84" rx="10" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.4"/>
+<text x="85" y="178" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#101720" font-weight="600" text-anchor="start">Operator / browser</text>
+<text x="85" y="200" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#5f6f80" font-weight="400" text-anchor="start">submits a placement request</text>
+<text x="85" y="218" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#5f6f80" font-weight="400" text-anchor="start">or reviews past assessments</text>
+<rect x="360" y="138" width="470" height="108" rx="10" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+<text x="378" y="164" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#1a73e8" font-weight="700" text-anchor="start">gridmind  ·  public web tier</text>
+<text x="378" y="184" font-family="JetBrains Mono, Consolas, monospace" font-size="12" fill="#5f6f80" font-weight="400" text-anchor="start">Cloud Run · web-bff-sa · ingress=all</text>
+<text x="378" y="204" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5f6f80" font-weight="400" text-anchor="start">• allowlist validation — no free text reaches a model</text>
+<text x="378" y="221" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5f6f80" font-weight="400" text-anchor="start">• rate limit 1/90s per IP, 60/day  • max-instances=1</text>
+<text x="378" y="238" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5f6f80" font-weight="400" text-anchor="start">• read-only identity · no model permission</text>
+<path d="M 282 192 L 356 192" stroke="#1a73e8" stroke-width="2.0" fill="none" marker-end="url(#arrow)"/>
+<circle cx="320" cy="174" r="13" fill="#1a73e8"/>
+<text x="320" y="178.5" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#fff" font-weight="700" text-anchor="middle">1</text>
+<rect x="870" y="138" width="400" height="108" rx="10" fill="#fff8e6" stroke="#f29900" stroke-width="1.4"/>
+<text x="888" y="162" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#8a5a00" font-weight="700" text-anchor="start">The most exposed service holds the least</text>
+<text x="888" y="182" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#6d4c00" font-weight="400" text-anchor="start">web-bff-sa can read one shared store, read-only.</text>
+<text x="888" y="199" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#6d4c00" font-weight="400" text-anchor="start">No writes anywhere. No facility data. No model</text>
+<text x="888" y="216" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#6d4c00" font-weight="400" text-anchor="start">access — so it cannot be turned into spend.</text>
+<text x="888" y="236" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#8a5a00" font-weight="600" text-anchor="start">Everything below is unreachable from here (404).</text>
+<rect x="40" y="286" width="1760" height="742" rx="14" fill="#fbfdff" stroke="#1a73e8" stroke-width="2" stroke-dasharray="9 6"/>
+<text x="60" y="312" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#1a73e8" font-weight="700" text-anchor="start" letter-spacing="1.2">PRIVATE NETWORK  —  gridmind-vpc  ·  subnet 10.20.0.0/24  ·  Private Google Access  ·  Cloud NAT for egress</text>
+<text x="60" y="332" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#5f6f80" font-weight="400" text-anchor="start">All services below are ingress=internal: not merely refused from the internet, but unacknowledged (HTTP 404).</text>
+<rect x="70" y="348" width="700" height="210" rx="10" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+<text x="90" y="376" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="17" fill="#1a73e8" font-weight="700" text-anchor="start">Orchestrator</text>
+<text x="90" y="396" font-family="JetBrains Mono, Consolas, monospace" font-size="12" fill="#5f6f80" font-weight="400" text-anchor="start">Cloud Run · orchestrator-agent-sa · gemini-3.5-flash (4096 thinking)</text>
+<rect x="90" y="410" width="660" height="132" rx="8" fill="#eef3f9" stroke="#c9d4e0" stroke-width="1.4"/>
+<text x="106" y="432" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#5f6f80" font-weight="700" text-anchor="start" letter-spacing="1.2">NEGOTIATION LOOP  ·  bounded to 3 rounds</text>
+<text x="106" y="454" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#101720" font-weight="400" text-anchor="start">Round 1  ask all four independently — no agent sees another's answer</text>
+<text x="106" y="474" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#101720" font-weight="400" text-anchor="start">Joint check  do the four verdicts describe ONE deployable plan? (deterministic, not a model call)</text>
+<text x="106" y="494" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#101720" font-weight="400" text-anchor="start">Round 2-3  re-prompt each agent with the others' positions attached</text>
+<text x="106" y="516" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#101720" font-weight="600" text-anchor="start">Resolve → approve / approve-with-conditions   ·   no surviving zone → ESCALATE to a human</text>
+<path d="M 595 246 L 420 344" stroke="#1a73e8" stroke-width="2.0" fill="none" marker-end="url(#arrow)"/>
+<circle cx="505" cy="322" r="13" fill="#1a73e8"/>
+<text x="505" y="326.5" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#fff" font-weight="700" text-anchor="middle">2</text>
+<rect x="70" y="580" width="700" height="150" rx="10" fill="#ffffff" stroke="#f29900" stroke-width="2"/>
+<text x="90" y="608" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="17" fill="#8a5a00" font-weight="700" text-anchor="start">Agent Gateway</text>
+<text x="90" y="628" font-family="JetBrains Mono, Consolas, monospace" font-size="12" fill="#5f6f80" font-weight="400" text-anchor="start">Cloud Run · gateway-agent-sa · the only path to the specialists</text>
+<text x="90" y="654" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#101720" font-weight="400" text-anchor="start">1  verify caller identity from its signed token</text>
+<text x="90" y="674" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#101720" font-weight="400" text-anchor="start">2  check the routing table — which caller may reach which assessor</text>
+<text x="90" y="694" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#8a5a00" font-weight="600" text-anchor="start">3  MODEL ARMOR screens the payload in, and the verdict out</text>
+<text x="90" y="714" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#101720" font-weight="400" text-anchor="start">4  log every allow and deny  ·  fails CLOSED if screening is unreachable</text>
+<path d="M 300 558 L 300 576" stroke="#1a73e8" stroke-width="2.0" fill="none" marker-end="url(#arrow)"/>
+<circle cx="300" cy="554" r="13" fill="#1a73e8"/>
+<text x="300" y="558.5" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#fff" font-weight="700" text-anchor="middle">3</text>
+<path d="M 560 576 L 560 558" stroke="#0f9d58" stroke-width="2.0" fill="none" marker-end="url(#arrow)"/>
+<text x="575" y="566" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#0f9d58" font-weight="400" text-anchor="start">verdicts back</text>
+<rect x="800" y="570" width="470" height="170" rx="10" fill="#fff8e6" stroke="#f29900" stroke-width="1.4"/>
+<text x="818" y="594" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="14" fill="#8a5a00" font-weight="700" text-anchor="start">Model Armor — content screening</text>
+<text x="818" y="616" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#6d4c00" font-weight="400" text-anchor="start">Catches what the output guardrails cannot: the</text>
+<text x="818" y="633" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#6d4c00" font-weight="400" text-anchor="start">guardrails check whether an answer is physically</text>
+<text x="818" y="650" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#6d4c00" font-weight="400" text-anchor="start">possible, and are blind to how it was reached.</text>
+<text x="818" y="674" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#6d4c00" font-weight="600" text-anchor="start">prompt injection        blocked</text>
+<text x="818" y="692" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#6d4c00" font-weight="600" text-anchor="start">instruction override    blocked</text>
+<text x="818" y="710" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#6d4c00" font-weight="600" text-anchor="start">sensitive data (PII)    blocked</text>
+<text x="818" y="730" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#0f7a52" font-weight="600" text-anchor="start">benign engineering text passes</text>
+<rect x="70" y="752" width="288" height="168" rx="10" fill="#ffffff" stroke="#0f9d58" stroke-width="1.8"/>
+<text x="86" y="778" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#0b6b3a" font-weight="700" text-anchor="start">Power assessor</text>
+<text x="86" y="797" font-family="JetBrains Mono, Consolas, monospace" font-size="10.5" fill="#5f6f80" font-weight="400" text-anchor="start">power-agent-sa</text>
+<text x="86" y="814" font-family="JetBrains Mono, Consolas, monospace" font-size="10.5" fill="#5f6f80" font-weight="400" text-anchor="start">gemini-3.5-flash-lite</text>
+<text x="86" y="838" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5f6f80" font-weight="400" text-anchor="start">breaker capacity, spare circuits,</text>
+<text x="86" y="855" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5f6f80" font-weight="400" text-anchor="start">switchgear outages, grid events</text>
+<rect x="86" y="874" width="256" height="32" rx="6" fill="#eef3f9" stroke="#c9d4e0" stroke-width="1.4"/>
+<text x="96" y="895" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#5f6f80" font-weight="400" text-anchor="start">harness: schema · retry · guardrail · log</text>
+<path d="M 214.0 730 L 214.0 748" stroke="#1a73e8" stroke-width="1.6" fill="none" marker-end="url(#arrow)"/>
+<rect x="376" y="752" width="288" height="168" rx="10" fill="#ffffff" stroke="#0f9d58" stroke-width="1.8"/>
+<text x="392" y="778" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#0b6b3a" font-weight="700" text-anchor="start">Cooling assessor</text>
+<text x="392" y="797" font-family="JetBrains Mono, Consolas, monospace" font-size="10.5" fill="#5f6f80" font-weight="400" text-anchor="start">cooling-agent-sa</text>
+<text x="392" y="814" font-family="JetBrains Mono, Consolas, monospace" font-size="10.5" fill="#5f6f80" font-weight="400" text-anchor="start">gemini-3.5-flash-lite</text>
+<text x="392" y="838" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5f6f80" font-weight="400" text-anchor="start">per-rack ceiling, thermal headroom,</text>
+<text x="392" y="855" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5f6f80" font-weight="400" text-anchor="start">CDU ports, PUE, water permit</text>
+<rect x="392" y="874" width="256" height="32" rx="6" fill="#eef3f9" stroke="#c9d4e0" stroke-width="1.4"/>
+<text x="402" y="895" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#5f6f80" font-weight="400" text-anchor="start">harness: schema · retry · guardrail · log</text>
+<path d="M 520.0 730 L 520.0 748" stroke="#1a73e8" stroke-width="1.6" fill="none" marker-end="url(#arrow)"/>
+<rect x="682" y="752" width="288" height="168" rx="10" fill="#ffffff" stroke="#0f9d58" stroke-width="1.8"/>
+<text x="698" y="778" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#0b6b3a" font-weight="700" text-anchor="start">Facilities assessor</text>
+<text x="698" y="797" font-family="JetBrains Mono, Consolas, monospace" font-size="10.5" fill="#5f6f80" font-weight="400" text-anchor="start">facilities-agent-sa</text>
+<text x="698" y="814" font-family="JetBrains Mono, Consolas, monospace" font-size="10.5" fill="#5f6f80" font-weight="400" text-anchor="start">gemini-3.5-flash-lite</text>
+<text x="698" y="838" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5f6f80" font-weight="400" text-anchor="start">free racks, liquid-ready racks,</text>
+<text x="698" y="855" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5f6f80" font-weight="400" text-anchor="start">floor loading, crew and retrofit</text>
+<rect x="698" y="874" width="256" height="32" rx="6" fill="#eef3f9" stroke="#c9d4e0" stroke-width="1.4"/>
+<text x="708" y="895" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#5f6f80" font-weight="400" text-anchor="start">harness: schema · retry · guardrail · log</text>
+<path d="M 826.0 730 L 826.0 748" stroke="#1a73e8" stroke-width="1.6" fill="none" marker-end="url(#arrow)"/>
+<rect x="988" y="752" width="288" height="168" rx="10" fill="#ffffff" stroke="#0f9d58" stroke-width="1.8"/>
+<text x="1004" y="778" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#0b6b3a" font-weight="700" text-anchor="start">Cost assessor</text>
+<text x="1004" y="797" font-family="JetBrains Mono, Consolas, monospace" font-size="10.5" fill="#5f6f80" font-weight="400" text-anchor="start">cost-agent-sa</text>
+<text x="1004" y="814" font-family="JetBrains Mono, Consolas, monospace" font-size="10.5" fill="#5f6f80" font-weight="400" text-anchor="start">gemini-3.5-flash-lite</text>
+<text x="1004" y="838" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5f6f80" font-weight="400" text-anchor="start">budget, cost per GPU-hour,</text>
+<text x="1004" y="855" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5f6f80" font-weight="400" text-anchor="start">retrofit payback, tariff rules</text>
+<rect x="1004" y="874" width="256" height="32" rx="6" fill="#eef3f9" stroke="#c9d4e0" stroke-width="1.4"/>
+<text x="1014" y="895" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#5f6f80" font-weight="400" text-anchor="start">harness: schema · retry · guardrail · log</text>
+<path d="M 1132.0 730 L 1132.0 748" stroke="#1a73e8" stroke-width="1.6" fill="none" marker-end="url(#arrow)"/>
+<circle cx="214.0" cy="726" r="13" fill="#1a73e8"/>
+<text x="214.0" y="730.5" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#fff" font-weight="700" text-anchor="middle">4</text>
+<rect x="40" y="1064" width="1760" height="190" rx="12" fill="#f4f7fb" stroke="#c9d4e0" stroke-width="1.4"/>
+<text x="60" y="1090" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#8b9aab" font-weight="700" text-anchor="start" letter-spacing="1.4">DATA LAYER  —  one store per domain, isolated by IAM condition on resource.name</text>
+<text x="60" y="1110" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#5f6f80" font-weight="400" text-anchor="start">Firestore Security Rules do NOT apply to server-side Admin SDK access, so per-collection rules would enforce nothing. The database is the smallest unit IAM can actually scope.</text>
+<path d="M 70 1139 A 140.0 9 0 0 1 350 1139 V 1217 A 140.0 9 0 0 1 70 1217 Z" fill="#ffffff" stroke="#0f9d58" stroke-width="1.4"/>
+<path d="M 70 1139 A 140.0 9 0 0 0 350 1139" fill="none" stroke="#0f9d58" stroke-width="1.4"/>
+<text x="88" y="1164" font-family="JetBrains Mono, Consolas, monospace" font-size="13" fill="#101720" font-weight="700" text-anchor="start">power-db</text>
+<text x="88" y="1186" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">Power assessor only</text>
+<text x="88" y="1206" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#d93025" font-weight="600" text-anchor="start">all other identities → 403</text>
+<path d="M 214.0 920 L 210.0 1130" stroke="#0f9d58" stroke-width="1.6" fill="none" marker-end="url(#arrowGrn)"/>
+<path d="M 382 1139 A 140.0 9 0 0 1 662 1139 V 1217 A 140.0 9 0 0 1 382 1217 Z" fill="#ffffff" stroke="#0f9d58" stroke-width="1.4"/>
+<path d="M 382 1139 A 140.0 9 0 0 0 662 1139" fill="none" stroke="#0f9d58" stroke-width="1.4"/>
+<text x="400" y="1164" font-family="JetBrains Mono, Consolas, monospace" font-size="13" fill="#101720" font-weight="700" text-anchor="start">cooling-db</text>
+<text x="400" y="1186" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">Cooling assessor only</text>
+<text x="400" y="1206" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#d93025" font-weight="600" text-anchor="start">all other identities → 403</text>
+<path d="M 520.0 920 L 522.0 1130" stroke="#0f9d58" stroke-width="1.6" fill="none" marker-end="url(#arrowGrn)"/>
+<path d="M 694 1139 A 140.0 9 0 0 1 974 1139 V 1217 A 140.0 9 0 0 1 694 1217 Z" fill="#ffffff" stroke="#0f9d58" stroke-width="1.4"/>
+<path d="M 694 1139 A 140.0 9 0 0 0 974 1139" fill="none" stroke="#0f9d58" stroke-width="1.4"/>
+<text x="712" y="1164" font-family="JetBrains Mono, Consolas, monospace" font-size="13" fill="#101720" font-weight="700" text-anchor="start">facilities-db</text>
+<text x="712" y="1186" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">Facilities assessor only</text>
+<text x="712" y="1206" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#d93025" font-weight="600" text-anchor="start">all other identities → 403</text>
+<path d="M 826.0 920 L 834.0 1130" stroke="#0f9d58" stroke-width="1.6" fill="none" marker-end="url(#arrowGrn)"/>
+<path d="M 1006 1139 A 140.0 9 0 0 1 1286 1139 V 1217 A 140.0 9 0 0 1 1006 1217 Z" fill="#ffffff" stroke="#0f9d58" stroke-width="1.4"/>
+<path d="M 1006 1139 A 140.0 9 0 0 0 1286 1139" fill="none" stroke="#0f9d58" stroke-width="1.4"/>
+<text x="1024" y="1164" font-family="JetBrains Mono, Consolas, monospace" font-size="13" fill="#101720" font-weight="700" text-anchor="start">cost-db</text>
+<text x="1024" y="1186" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">Cost assessor only</text>
+<text x="1024" y="1206" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#d93025" font-weight="600" text-anchor="start">all other identities → 403</text>
+<path d="M 1132.0 920 L 1146.0 1130" stroke="#0f9d58" stroke-width="1.6" fill="none" marker-end="url(#arrowGrn)"/>
+<path d="M 1318 1139 A 140.0 9 0 0 1 1598 1139 V 1217 A 140.0 9 0 0 1 1318 1217 Z" fill="#ffffff" stroke="#1a73e8" stroke-width="1.4"/>
+<path d="M 1318 1139 A 140.0 9 0 0 0 1598 1139" fill="none" stroke="#1a73e8" stroke-width="1.4"/>
+<text x="1336" y="1164" font-family="JetBrains Mono, Consolas, monospace" font-size="13" fill="#101720" font-weight="700" text-anchor="start">shared-db</text>
+<text x="1336" y="1186" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">Orchestrator + web (read-only)</text>
+<text x="1336" y="1206" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#d93025" font-weight="600" text-anchor="start">all other identities → 403</text>
+<circle cx="184.0" cy="1108" r="13" fill="#0f9d58"/>
+<text x="184.0" y="1112.5" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#fff" font-weight="700" text-anchor="middle">5</text>
+<path d="M 770 498 V 1268 H 1458.0 V 1130" stroke="#1a73e8" stroke-width="1.6" fill="none" marker-end="url(#arrow)" stroke-dasharray="6 4"/>
+<text x="1328.0" y="1110" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#1a73e8" font-weight="600" text-anchor="start">queue · precedent · audit log</text>
+<rect x="1300" y="348" width="470" height="132" rx="10" fill="#ffffff" stroke="#7b3ff2" stroke-width="1.8"/>
+<text x="1318" y="376" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="16" fill="#5a2bc0" font-weight="700" text-anchor="start">Vertex AI  ·  Gemini 3.5</text>
+<text x="1318" y="396" font-family="JetBrains Mono, Consolas, monospace" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">location=global (regional endpoints 404)</text>
+<text x="1318" y="420" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5f6f80" font-weight="400" text-anchor="start">flash-lite for the four assessors — one narrow judgement each</text>
+<text x="1318" y="438" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5f6f80" font-weight="400" text-anchor="start">flash + 4096 thinking for reconciliation, the hard step</text>
+<text x="1318" y="462" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5a2bc0" font-weight="600" text-anchor="start">Callers hold one permission: endpoints.predict</text>
+<path d="M 338 772 V 738 H 1296 V 448" stroke="#7b3ff2" stroke-width="1.3" fill="none" marker-end="url(#arrowVio)" stroke-dasharray="5 4"/>
+<path d="M 644 772 V 738 H 1296 V 448" stroke="#7b3ff2" stroke-width="1.3" fill="none" marker-end="url(#arrowVio)" stroke-dasharray="5 4"/>
+<path d="M 950 772 V 738 H 1296 V 448" stroke="#7b3ff2" stroke-width="1.3" fill="none" marker-end="url(#arrowVio)" stroke-dasharray="5 4"/>
+<path d="M 1256 772 V 738 H 1296 V 448" stroke="#7b3ff2" stroke-width="1.3" fill="none" marker-end="url(#arrowVio)" stroke-dasharray="5 4"/>
+<path d="M 770 408 L 1296 408" stroke="#7b3ff2" stroke-width="1.4" fill="none" marker-end="url(#arrowVio)" stroke-dasharray="5 4"/>
+<rect x="1300" y="756" width="470" height="218" rx="10" fill="#ffffff" stroke="#00838f" stroke-width="1.8"/>
+<text x="1318" y="784" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="16" fill="#00646e" font-weight="700" text-anchor="start">Cloud Logging  ·  audit trail</text>
+<text x="1318" y="806" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5f6f80" font-weight="400" text-anchor="start">Every service writes structured JSON to stdout. One correlation</text>
+<text x="1318" y="822" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5f6f80" font-weight="400" text-anchor="start">id threads every step of a single decision:</text>
+<text x="1318" y="844" font-family="JetBrains Mono, Consolas, monospace" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">constraint_context_built</text>
+<text x="1318" y="862" font-family="JetBrains Mono, Consolas, monospace" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">model_call  · tokens, duration</text>
+<text x="1318" y="880" font-family="JetBrains Mono, Consolas, monospace" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">guardrail_violation  · retry</text>
+<text x="1318" y="898" font-family="JetBrains Mono, Consolas, monospace" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">model_armor_screened</text>
+<text x="1318" y="916" font-family="JetBrains Mono, Consolas, monospace" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">gateway_allowed / gateway_denied</text>
+<text x="1318" y="934" font-family="JetBrains Mono, Consolas, monospace" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">verdict_returned · round_complete</text>
+<text x="1318" y="958" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#00646e" font-weight="600" text-anchor="start">A whole multi-agent decision is reconstructable from one filter.</text>
+<path d="M 1280 792 L 1296 792" stroke="#00838f" stroke-width="1.8" fill="none" marker-end="url(#arrowTeal)" stroke-dasharray="5 4"/>
+<rect x="40" y="1278" width="880" height="330" rx="12" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.4"/>
+<text x="62" y="1308" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#8b9aab" font-weight="700" text-anchor="start" letter-spacing="1.4">INSIDE ONE ASSESSOR — the harness</text>
+<text x="62" y="1330" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#5f6f80" font-weight="400" text-anchor="start">The model call is one step inside this, not the agent itself. Swap the model and all five properties survive.</text>
+<rect x="62" y="1352" width="836" height="42" rx="6" fill="#eef3f9" stroke="#c9d4e0" stroke-width="1"/>
+<text x="76" y="1370" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#101720" font-weight="700" text-anchor="start">1  Constraint context</text>
+<text x="280" y="1368" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">assembled BEFORE any model call: engineering constants · the agent's own live data ·</text>
+<text x="280" y="1384" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">external signal (grid, weather, crew, freight) · applicable federal and state policy</text>
+<rect x="62" y="1400" width="836" height="42" rx="6" fill="#ffffff" stroke="#c9d4e0" stroke-width="1"/>
+<text x="76" y="1418" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#101720" font-weight="700" text-anchor="start">2  Structured I/O</text>
+<text x="280" y="1416" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">schema-constrained request and reply — never free text; validated again after return,</text>
+<text x="280" y="1432" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">because 'matches the schema' and 'is semantically valid' are different claims</text>
+<rect x="62" y="1448" width="836" height="42" rx="6" fill="#eef3f9" stroke="#c9d4e0" stroke-width="1"/>
+<text x="76" y="1466" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#101720" font-weight="700" text-anchor="start">3  Guardrail</text>
+<text x="280" y="1464" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">the verdict is re-checked against the SAME figures the agent was handed — catching a zone</text>
+<text x="280" y="1480" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">231 kW short, a switchgear outage ignored, or an invented zone</text>
+<rect x="62" y="1496" width="836" height="42" rx="6" fill="#ffffff" stroke="#c9d4e0" stroke-width="1"/>
+<text x="76" y="1514" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#101720" font-weight="700" text-anchor="start">4  Retry with correction</text>
+<text x="280" y="1512" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">on violation the failure text is fed back, so the next attempt is told exactly what</text>
+<text x="280" y="1528" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">it got wrong. Three attempts, exponential backoff</text>
+<rect x="62" y="1544" width="836" height="42" rx="6" fill="#eef3f9" stroke="#c9d4e0" stroke-width="1"/>
+<text x="76" y="1562" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#101720" font-weight="700" text-anchor="start">5  Fail safe</text>
+<text x="280" y="1560" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">retries exhausted → return INFEASIBLE and escalate. Never a guess: a broken assessor</text>
+<text x="280" y="1576" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#5f6f80" font-weight="400" text-anchor="start">stops the line rather than approving and hoping</text>
+<rect x="946" y="1278" width="854" height="330" rx="12" fill="#ffffff" stroke="#c9d4e0" stroke-width="1.4"/>
+<text x="968" y="1308" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#8b9aab" font-weight="700" text-anchor="start" letter-spacing="1.4">REQUEST WORKFLOW</text>
+<circle cx="978" cy="1344" r="11" fill="#1a73e8"/>
+<text x="978" y="1348.5" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#fff" font-weight="700" text-anchor="middle">1</text>
+<text x="1000" y="1349" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#101720" font-weight="700" text-anchor="start">Request arrives</text>
+<text x="1000" y="1365" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.8" fill="#5f6f80" font-weight="400" text-anchor="start">Validated against an allowlist and rate limited. No free text is forwarded to a model.</text>
+<circle cx="978" cy="1377" r="11" fill="#1a73e8"/>
+<text x="978" y="1381.5" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#fff" font-weight="700" text-anchor="middle">2</text>
+<text x="1000" y="1382" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#101720" font-weight="700" text-anchor="start">Orchestrator opens a round</text>
+<text x="1000" y="1398" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.8" fill="#5f6f80" font-weight="400" text-anchor="start">Reads the queue from its one permitted store. It holds no facility data at all.</text>
+<circle cx="978" cy="1410" r="11" fill="#f29900"/>
+<text x="978" y="1414.5" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#fff" font-weight="700" text-anchor="middle">3</text>
+<text x="1000" y="1415" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#101720" font-weight="700" text-anchor="start">Gateway screens and routes</text>
+<text x="1000" y="1431" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.8" fill="#5f6f80" font-weight="400" text-anchor="start">Identity checked, routing table applied, payload screened by Model Armor, decision logged.</text>
+<circle cx="978" cy="1443" r="11" fill="#1a73e8"/>
+<text x="978" y="1447.5" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#fff" font-weight="700" text-anchor="middle">4</text>
+<text x="1000" y="1448" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#101720" font-weight="700" text-anchor="start">Four assessors run in parallel</text>
+<text x="1000" y="1464" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.8" fill="#5f6f80" font-weight="400" text-anchor="start">Each answers one question, reading only its own store. Independent by construction.</text>
+<circle cx="978" cy="1476" r="11" fill="#0f9d58"/>
+<text x="978" y="1480.5" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#fff" font-weight="700" text-anchor="middle">5</text>
+<text x="1000" y="1481" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#101720" font-weight="700" text-anchor="start">Each reads its own store only</text>
+<text x="1000" y="1497" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.8" fill="#5f6f80" font-weight="400" text-anchor="start">Cross-domain reads return 403 from the database itself, not from our code.</text>
+<circle cx="978" cy="1509" r="11" fill="#1a73e8"/>
+<text x="978" y="1513.5" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#fff" font-weight="700" text-anchor="middle">6</text>
+<text x="1000" y="1514" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#101720" font-weight="700" text-anchor="start">Joint feasibility check</text>
+<text x="1000" y="1530" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.8" fill="#5f6f80" font-weight="400" text-anchor="start">Deterministic: do the four verdicts describe ONE plan? Not 'do they agree'.</text>
+<circle cx="978" cy="1542" r="11" fill="#1a73e8"/>
+<text x="978" y="1546.5" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#fff" font-weight="700" text-anchor="middle">7</text>
+<text x="1000" y="1547" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#101720" font-weight="700" text-anchor="start">Conflict → another round</text>
+<text x="1000" y="1563" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.8" fill="#5f6f80" font-weight="400" text-anchor="start">Each assessor is re-prompted with the others' positions. Bounded to three rounds.</text>
+<circle cx="978" cy="1575" r="11" fill="#0f9d58"/>
+<text x="978" y="1579.5" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#fff" font-weight="700" text-anchor="middle">8</text>
+<text x="1000" y="1580" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#101720" font-weight="700" text-anchor="start">Decision, or escalation</text>
+<text x="1000" y="1596" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.8" fill="#5f6f80" font-weight="400" text-anchor="start">Approve with conditions and a costed trade-off — or hand a human every option, never a silent choice.</text>
+<line x1="40" y1="1624" x2="1800" y2="1624" stroke="#c9d4e0" stroke-width="1"/>
+<text x="50" y="1646" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#101720" font-weight="400" text-anchor="start">Every refusal in this diagram is enforced by Google Cloud — IAM conditions, Cloud Run invoker policy and VPC ingress — not by application code that could be edited away.</text>
+<text x="50" y="1668" font-family="JetBrains Mono, Consolas, monospace" font-size="11" fill="#8b9aab" font-weight="400" text-anchor="start">verify:  bash infra/iam/03_verify_isolation.sh    ·    bash scripts/demo_denial.sh    ·    python -m scripts.demo_guardrails</text>
+</svg>
