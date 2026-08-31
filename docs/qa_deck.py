@@ -21,7 +21,8 @@ from pathlib import Path
 from pptx import Presentation
 from pptx.util import Emu
 
-DECK = Path(__file__).resolve().parent / "GridMind_Submission_Deck.pptx"
+DECK = Path(sys.argv[1]) if len(sys.argv) > 1 else \
+    Path(__file__).resolve().parent / "GridMind_Submission_Deck.pptx"
 W, H, MARGIN = 13.333, 7.5, 0.5
 
 # average advance width as a fraction of point size, for mixed-case prose
