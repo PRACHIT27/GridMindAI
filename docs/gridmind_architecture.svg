@@ -66,7 +66,7 @@
 <path d="M 150 232 L 150 350 L 285 350" stroke="#5b9dff" stroke-width="1.7" fill="none" marker-end="url(#mCy)" stroke-linejoin="round"/>
 <rect x="83.525" y="287" width="132.95" height="19" rx="4" fill="#12161c" opacity="0.96"/>
 <text x="150" y="300" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#5b9dff" font-weight="400" text-anchor="middle">POST /api/negotiate</text>
-<path d="M 330 425 L 330 505" stroke="#5b9dff" stroke-width="1.7" fill="none" marker-end="url(#mCy)" stroke-linejoin="round"/>
+<path d="M 330 425 L 330 614" stroke="#5b9dff" stroke-width="1.7" fill="none" marker-end="url(#mCy)" stroke-linejoin="round"/>
 <rect x="448.15" y="445" width="223.7" height="32" rx="4" fill="#12161c" opacity="0.96"/>
 <text x="560" y="458" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#5b9dff" font-weight="400" text-anchor="middle">allowlist validated — no free text</text>
 <text x="560" y="471" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#5b9dff" font-weight="400" text-anchor="middle">reaches a model  ·  rate limited</text>
@@ -83,10 +83,10 @@
 <text x="1430" y="688.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#34d399" font-weight="700" text-anchor="middle">shared-db</text>
 <text x="1430" y="703.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">queue · precedent · audit log</text>
 <text x="1430" y="717.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">the ONLY store it can open</text>
-<path d="M 440 628 L 1300 628" stroke="#34d399" stroke-width="1.7" fill="none" marker-end="url(#mGrn)" stroke-linejoin="round"/>
+<path d="M 366 628 L 1394 628" stroke="#34d399" stroke-width="1.7" fill="none" marker-end="url(#mGrn)" stroke-linejoin="round"/>
 <rect x="715.8" y="603" width="308.4" height="19" rx="4" fill="#12161c" opacity="0.96"/>
 <text x="870" y="616" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#34d399" font-weight="400" text-anchor="middle">reads the queue  ·  recalls a matching precedent</text>
-<path d="M 1300 660 L 440 660" stroke="#34d399" stroke-width="1.7" fill="none" marker-end="url(#mGrn)" stroke-linejoin="round"/>
+<path d="M 1394 660 L 366 660" stroke="#34d399" stroke-width="1.7" fill="none" marker-end="url(#mGrn)" stroke-linejoin="round"/>
 <rect x="758.15" y="679" width="223.7" height="19" rx="4" fill="#12161c" opacity="0.96"/>
 <text x="870" y="692" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#34d399" font-weight="400" text-anchor="middle">writes the full negotiation record</text>
 <use href="#ic-cloud-run" x="304.0" y="854.0" width="52" height="52"/>
@@ -97,53 +97,57 @@
 <path d="M 330 720 L 330 838" stroke="#5b9dff" stroke-width="1.7" fill="none" marker-end="url(#mCy)" stroke-linejoin="round"/>
 <rect x="248.4" y="771" width="163.2" height="19" rx="4" fill="#12161c" opacity="0.96"/>
 <text x="330" y="784" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#5b9dff" font-weight="400" text-anchor="middle">one round — ask all four</text>
-<use href="#ic-armor" x="674.0" y="854.0" width="52" height="52"/>
-<rect x="565.0" y="914.0" width="270" height="48" rx="5" fill="#1b212a" opacity="0.94"/>
-<text x="700" y="928.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#fbbf24" font-weight="700" text-anchor="middle">Model Armor</text>
-<text x="700" y="943.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">screens the payload in,</text>
-<text x="700" y="957.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">the verdict out · FAILS CLOSED</text>
-<path d="M 400 868 L 570 868" stroke="#fbbf24" stroke-width="1.7" fill="none" marker-end="url(#mAmb)" stroke-linejoin="round"/>
-<rect x="457.85" y="843" width="54.3" height="19" rx="4" fill="#12161c" opacity="0.96"/>
-<text x="485" y="856" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#fbbf24" font-weight="400" text-anchor="middle">screen</text>
-<path d="M 570 896 L 400 896" stroke="#fbbf24" stroke-width="1.7" fill="none" marker-end="url(#mAmb)" stroke-linejoin="round"/>
-<rect x="460.875" y="915" width="48.25" height="19" rx="4" fill="#12161c" opacity="0.96"/>
-<text x="485" y="928" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#fbbf24" font-weight="400" text-anchor="middle">clean</text>
-<use href="#ic-iam" x="1404.0" y="854.0" width="52" height="52"/>
-<rect x="1280.0" y="914.0" width="300" height="48" rx="5" fill="#1b212a" opacity="0.94"/>
-<text x="1430" y="928.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#fbbf24" font-weight="700" text-anchor="middle">Identity + routing table</text>
-<text x="1430" y="943.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">verify the signed caller token</text>
-<text x="1430" y="957.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">log every allow and deny</text>
-<path d="M 1180 880 L 1300 880" stroke="#fbbf24" stroke-width="1.7" fill="none" marker-end="url(#mAmb)" stroke-linejoin="round"/>
+<use href="#ic-iam" x="734.0" y="854.0" width="52" height="52"/>
+<rect x="610.0" y="914.0" width="300" height="48" rx="5" fill="#1b212a" opacity="0.94"/>
+<text x="760" y="928.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#fbbf24" font-weight="700" text-anchor="middle">1 · Identity + routing</text>
+<text x="760" y="943.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">verify the signed caller token</text>
+<text x="760" y="957.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">check the routing table · log allow/deny</text>
+<path d="M 366 880 L 724 880" stroke="#fbbf24" stroke-width="1.7" fill="none" marker-end="url(#mAmb)" stroke-linejoin="round"/>
+<rect x="490.625" y="839" width="108.75" height="32" rx="4" fill="#12161c" opacity="0.96"/>
+<text x="545" y="852" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#fbbf24" font-weight="400" text-anchor="middle">who is calling,</text>
+<text x="545" y="865" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#fbbf24" font-weight="400" text-anchor="middle">and may they?</text>
+<use href="#ic-armor" x="1164.0" y="854.0" width="52" height="52"/>
+<rect x="1040.0" y="914.0" width="300" height="48" rx="5" fill="#1b212a" opacity="0.94"/>
+<text x="1190" y="928.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#fbbf24" font-weight="700" text-anchor="middle">2 · Model Armor</text>
+<text x="1190" y="943.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">screen the payload in,</text>
+<text x="1190" y="957.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">and the verdict out · FAILS CLOSED</text>
+<path d="M 796 880 L 1154 880" stroke="#fbbf24" stroke-width="1.7" fill="none" marker-end="url(#mAmb)" stroke-linejoin="round"/>
+<rect x="911.55" y="839" width="126.89999999999999" height="32" rx="4" fill="#12161c" opacity="0.96"/>
+<text x="975" y="852" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#fbbf24" font-weight="400" text-anchor="middle">allowed — now</text>
+<text x="975" y="865" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#fbbf24" font-weight="400" text-anchor="middle">screen the content</text>
 <use href="#ic-cloud-run" x="316.0" y="1126.0" width="48" height="48"/>
 <rect x="200.0" y="1182.0" width="280" height="62" rx="5" fill="#1b212a" opacity="0.94"/>
 <text x="340" y="1196.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#5b9dff" font-weight="700" text-anchor="middle">Power assessor</text>
 <text x="340" y="1211.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">power-agent-sa</text>
 <text x="340" y="1225.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">breaker capacity · circuits</text>
 <text x="340" y="1239.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">switchgear outages</text>
-<path d="M 330 985 L 330 1060 L 340 1060 L 340 1122" stroke="#5b9dff" stroke-width="1.5" fill="none" marker-end="url(#mCy)" stroke-linejoin="round"/>
-<rect x="600.175" y="1033" width="459.65" height="19" rx="4" fill="#12161c" opacity="0.96"/>
-<text x="830" y="1046" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#5b9dff" font-weight="400" text-anchor="middle">route to each assessor — four run in parallel, none sees another's answer</text>
+<path d="M 1190 990 L 1190 1058 L 340 1058 L 340 1122" stroke="#5b9dff" stroke-width="1.5" fill="none" marker-end="url(#mCy)" stroke-linejoin="round"/>
+<rect x="485.3" y="1031" width="429.4" height="19" rx="4" fill="#12161c" opacity="0.96"/>
+<text x="700" y="1044" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#5b9dff" font-weight="400" text-anchor="middle">3 · screened and cleared — routed to each assessor, four in parallel</text>
 <use href="#ic-cloud-run" x="636.0" y="1126.0" width="48" height="48"/>
 <rect x="520.0" y="1182.0" width="280" height="62" rx="5" fill="#1b212a" opacity="0.94"/>
 <text x="660" y="1196.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#5b9dff" font-weight="700" text-anchor="middle">Cooling assessor</text>
 <text x="660" y="1211.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">cooling-agent-sa</text>
 <text x="660" y="1225.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">per-rack ceiling · CDU ports</text>
 <text x="660" y="1239.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">PUE · water permit</text>
-<path d="M 330 985 L 330 1060 L 660 1060 L 660 1122" stroke="#5b9dff" stroke-width="1.5" fill="none" marker-end="url(#mCy)" stroke-linejoin="round"/>
+<path d="M 1190 990 L 1190 1058 L 660 1058 L 660 1122" stroke="#5b9dff" stroke-width="1.5" fill="none" marker-end="url(#mCy)" stroke-linejoin="round"/>
 <use href="#ic-cloud-run" x="956.0" y="1126.0" width="48" height="48"/>
 <rect x="840.0" y="1182.0" width="280" height="62" rx="5" fill="#1b212a" opacity="0.94"/>
 <text x="980" y="1196.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#5b9dff" font-weight="700" text-anchor="middle">Facilities assessor</text>
 <text x="980" y="1211.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">facilities-agent-sa</text>
 <text x="980" y="1225.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">free &amp; liquid-ready racks</text>
 <text x="980" y="1239.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">floor loading · crew</text>
-<path d="M 330 985 L 330 1060 L 980 1060 L 980 1122" stroke="#5b9dff" stroke-width="1.5" fill="none" marker-end="url(#mCy)" stroke-linejoin="round"/>
+<path d="M 1190 990 L 1190 1058 L 980 1058 L 980 1122" stroke="#5b9dff" stroke-width="1.5" fill="none" marker-end="url(#mCy)" stroke-linejoin="round"/>
 <use href="#ic-cloud-run" x="1276.0" y="1126.0" width="48" height="48"/>
 <rect x="1160.0" y="1182.0" width="280" height="62" rx="5" fill="#1b212a" opacity="0.94"/>
 <text x="1300" y="1196.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#5b9dff" font-weight="700" text-anchor="middle">Cost assessor</text>
 <text x="1300" y="1211.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">cost-agent-sa</text>
 <text x="1300" y="1225.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">budget · cost per GPU-hour</text>
 <text x="1300" y="1239.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">retrofit payback · tariff</text>
-<path d="M 330 985 L 330 1060 L 1300 1060 L 1300 1122" stroke="#5b9dff" stroke-width="1.5" fill="none" marker-end="url(#mCy)" stroke-linejoin="round"/>
+<path d="M 1190 990 L 1190 1058 L 1300 1058 L 1300 1122" stroke="#5b9dff" stroke-width="1.5" fill="none" marker-end="url(#mCy)" stroke-linejoin="round"/>
+<rect x="215" y="1268" width="1215" height="52" rx="9" fill="#1a1410" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="240" y="1290" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#fbbf24" font-weight="700" text-anchor="start" letter-spacing="0.8">HARNESS — wraps every assessor: the model call is one step inside it, not the agent itself</text>
+<text x="240" y="1308" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="start">scoped read (one store only) · schema-validated I/O · GUARDRAIL re-checks every verdict against the SAME figures the agent was given, blocking a zone 231 kW short or an invented zone · violation fed back, 3 attempts, then FAIL SAFE to INFEASIBLE</text>
 <use href="#ic-firestore" x="318.0" y="1428.0" width="44" height="44"/>
 <rect x="210.0" y="1480.0" width="260" height="48" rx="5" fill="#1b212a" opacity="0.94"/>
 <text x="340" y="1494.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#34d399" font-weight="700" text-anchor="middle">power-db</text>
@@ -171,7 +175,7 @@
 <text x="1300" y="1509.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">this assessor only</text>
 <text x="1300" y="1523.0" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#98a6b8" font-weight="400" text-anchor="middle">every other identity → 403</text>
 <path d="M 1300 1246 L 1300 1424" stroke="#34d399" stroke-width="1.5" fill="none" marker-end="url(#mGrn)" stroke-linejoin="round"/>
-<path d="M 408 1406 L 520 1438 L 556 1446" stroke="#f87171" stroke-width="1.7" fill="none" marker-end="url(#mRed)" stroke-linejoin="round" stroke-dasharray="6 4"/>
+<path d="M 408 1406 L 560 1440 L 628 1446" stroke="#f87171" stroke-width="1.7" fill="none" marker-end="url(#mRed)" stroke-linejoin="round" stroke-dasharray="6 4"/>
 <rect x="409.075" y="1359" width="241.85" height="32" rx="4" fill="#12161c" opacity="0.96"/>
 <text x="530" y="1372" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#f87171" font-weight="400" text-anchor="middle">403 — refused by the database itself,</text>
 <text x="530" y="1385" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#f87171" font-weight="400" text-anchor="middle">not by any check we wrote</text>
@@ -192,9 +196,9 @@
 <text x="430" y="1797" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#fbbf24" font-weight="700" text-anchor="middle">do the four verdicts describe</text>
 <text x="430" y="1814" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#fbbf24" font-weight="700" text-anchor="middle">ONE deployable plan?</text>
 <path d="M 340 1246 L 200 1246 L 200 1800 L 255 1800" stroke="#5b9dff" stroke-width="1.7" fill="none" marker-end="url(#mCy)" stroke-linejoin="round"/>
-<rect x="118.4" y="1587" width="163.2" height="32" rx="4" fill="#12161c" opacity="0.96"/>
-<text x="200" y="1600" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#5b9dff" font-weight="400" text-anchor="middle">verdicts, plus the zones</text>
-<text x="200" y="1613" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#5b9dff" font-weight="400" text-anchor="middle">each assessor rules out</text>
+<rect x="63.94999999999999" y="1587" width="272.1" height="32" rx="4" fill="#12161c" opacity="0.96"/>
+<text x="200" y="1600" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#5b9dff" font-weight="400" text-anchor="middle">verdicts — screened again on the way out —</text>
+<text x="200" y="1613" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#5b9dff" font-weight="400" text-anchor="middle">plus the zones each assessor rules out</text>
 <path d="M 605 1782 L 820 1782 L 820 1668 L 330 1668 L 330 945" stroke="#fbbf24" stroke-width="1.7" fill="none" marker-end="url(#mAmb)" stroke-linejoin="round"/>
 <rect x="905.0" y="1769" width="260.0" height="32" rx="4" fill="#12161c" opacity="0.96"/>
 <text x="1035" y="1782" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#fbbf24" font-weight="400" text-anchor="middle">NO, rounds remain — re-ask each assessor</text>

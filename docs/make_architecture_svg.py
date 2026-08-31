@@ -163,7 +163,7 @@ node(330, 350, "cloud-run", "gridmind · web tier",
      "ingress=all — the only public door",
      "web-bff-sa · read-only · no model access", w=340)
 edge([(150, 232), (150, 350), (285, 350)], "POST /api/negotiate", color=CY, lx=150, ly=300)
-edge([(330, 425), (330, 505)], "allowlist validated — no free text",
+edge([(330, 425), (330, 614)], "allowlist validated — no free text",
      "reaches a model  ·  rate limited", color=CY, lx=560, ly=458)
 
 # ----------------------------------------------------------------- VPC
@@ -176,22 +176,28 @@ node(330, 640, "cloud-run", "Orchestrator", "orchestrator-agent-sa",
      "gemini-3.5-flash · 4096 thinking", w=270)
 node(1430, 640, "firestore", "shared-db", "queue · precedent · audit log",
      "the ONLY store it can open", color=GRN, w=280)
-edge([(440, 628), (1300, 628)], "reads the queue  ·  recalls a matching precedent",
+edge([(366, 628), (1394, 628)], "reads the queue  ·  recalls a matching precedent",
      color=GRN, lx=870, ly=616)
-edge([(1300, 660), (440, 660)], "writes the full negotiation record", color=GRN,
+edge([(1394, 660), (366, 660)], "writes the full negotiation record", color=GRN,
      lx=870, ly=692)
 
 # gateway + model armor
+# The gateway is a PIPELINE, not three unrelated boxes. Order matters and is
+# enforced in code: identity and routing are checked first, because there is no
+# point paying for a screening call on a request that is about to be refused.
 node(330, 880, "cloud-run", "Agent Gateway", "gateway-agent-sa",
      "the only path to the assessors", w=270)
 edge([(330, 720), (330, 838)], "one round — ask all four", color=CY, lx=330, ly=784)
-node(700, 880, "armor", "Model Armor", "screens the payload in,",
-     "the verdict out · FAILS CLOSED", color=AMB, w=270)
-edge([(400, 868), (570, 868)], "screen", color=AMB, lx=485, ly=856)
-edge([(570, 896), (400, 896)], "clean", color=AMB, lx=485, ly=928)
-node(1430, 880, "iam", "Identity + routing table",
-     "verify the signed caller token", "log every allow and deny", color=AMB, w=300)
-edge([(1180, 880), (1300, 880)], "", color=AMB)
+
+node(760, 880, "iam", "1 · Identity + routing", "verify the signed caller token",
+     "check the routing table · log allow/deny", color=AMB, w=300)
+edge([(366, 880), (724, 880)], "who is calling,", "and may they?", color=AMB,
+     lx=545, ly=852)
+
+node(1190, 880, "armor", "2 · Model Armor", "screen the payload in,",
+     "and the verdict out · FAILS CLOSED", color=AMB, w=300)
+edge([(796, 880), (1154, 880)], "allowed — now", "screen the content", color=AMB,
+     lx=975, ly=852)
 
 # assessors
 COLS = [(340, "Power", "power-agent-sa", "breaker capacity · circuits", "switchgear outages"),
@@ -201,9 +207,20 @@ COLS = [(340, "Power", "power-agent-sa", "breaker capacity · circuits", "switch
 AY = 1150
 for i, (cx, name, sa, l1, l2) in enumerate(COLS):
     node(cx, AY, "cloud-run", f"{name} assessor", sa, l1, l2, size=48, w=280)
-    edge([(330, 985), (330, 1060), (cx, 1060), (cx, AY - 28)],
-         "route to each assessor — four run in parallel, none sees another's answer"
-         if i == 0 else "", color=CY, lx=830, ly=1046, sw=1.5)
+    edge([(1190, 990), (1190, 1058), (cx, 1058), (cx, AY - 28)],
+         "3 · screened and cleared — routed to each assessor, four in parallel"
+         if i == 0 else "", color=CY, lx=700, ly=1044, sw=1.5)
+
+# guardrail band — sits between the assessors and anything downstream, because
+# that is exactly where it runs: after the model call, before the verdict is
+# allowed to leave the agent.
+GBY = 1268
+A(f'<rect x="215" y="{GBY}" width="1215" height="52" rx="9" fill="#1a1410" '
+  f'stroke="{AMB}" stroke-width="1.5" stroke-dasharray="6 4"/>')
+txt(240, GBY + 22, "HARNESS — wraps every assessor: the model call is one step inside it, not the agent itself", size=11.5, fill=AMB,
+    weight="700", anchor="start", spacing="0.8")
+txt(240, GBY + 40, "scoped read (one store only) · schema-validated I/O · GUARDRAIL re-checks every verdict against the SAME figures the agent was given, blocking a zone 231 kW short or an invented zone · violation fed back, 3 attempts, then FAIL SAFE to INFEASIBLE",
+    size=10.5, fill=DIM, anchor="start")
 
 # stores
 DY = 1450
@@ -219,7 +236,7 @@ for i, (cx, name, *_) in enumerate(COLS):
 
 # A denied read, drawn rather than described. Without this the "denied by
 # policy" key has nothing to point at, and the isolation reads as an assertion.
-edge([(408, DY - 44), (520, DY - 12), (556, DY - 4)],
+edge([(408, DY - 44), (560, DY - 10), (628, DY - 4)],
      "403 — refused by the database itself,", "not by any check we wrote",
      color=RED, dash="6 4", sw=1.7, lx=530, ly=DY - 78)
 txt(408, DY - 56, "power assessor → cooling-db", size=10, fill=RED, anchor="start")
@@ -245,7 +262,8 @@ DEC = 1800
 diamond(430, DEC, 350, 100, "do the four verdicts describe",
         "ONE deployable plan?")
 edge([(340, AY + 96), (200, AY + 96), (200, DEC), (255, DEC)],
-     "verdicts, plus the zones", "each assessor rules out", color=CY, lx=200, ly=1600)
+     "verdicts — screened again on the way out —", "plus the zones each assessor rules out",
+     color=CY, lx=200, ly=1600)
 
 edge([(605, DEC - 18), (820, DEC - 18), (820, 1668), (330, 1668), (330, 945)],
      "NO, rounds remain — re-ask each assessor",
