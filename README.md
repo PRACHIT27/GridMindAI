@@ -229,9 +229,10 @@ bash infra/00_project_and_apis.sh
 # 3. Create the five Firestore databases
 bash infra/firestore/01_create_databases.sh
 
-# 4. Create six service accounts, two custom roles, conditional bindings
+# 4. Create seven service accounts, three custom roles, conditional bindings
 bash infra/iam/01_create_service_accounts.sh
 bash infra/iam/02_create_role_and_bind.sh
+bash infra/iam/04_create_web_sa.sh       # web-bff-sa + the read-only web role
 
 # 5. Install dependencies
 python -m venv .venv && ./.venv/Scripts/python.exe -m pip install -r requirements.txt
@@ -240,9 +241,18 @@ gcloud auth application-default login
 # 6. Seed the facility (runs the leak check first and aborts if it fails)
 python -m seed.generate_seed_data
 
-# 7. Deploy six Cloud Run services and wire the invoker chain
+# 7. Network: the VPC, plus the NAT that Model Armor's regional endpoint needs
+#    (Private Google Access does not cover it — without this, screening times out)
 bash infra/network/01_create_vpc.sh
+bash infra/network/03_create_nat.sh
+
+# 8. Deploy seven Cloud Run services and wire the invoker chain
 bash infra/cloudrun/deploy.sh
+
+# 9. Take the six internal services off the public internet.
+#    Must run AFTER deploy — it grants VPC egress first, then sets ingress=internal.
+#    The reverse order produces 403s that look exactly like an IAM bug.
+bash infra/network/02_apply_ingress.sh
 ```
 
 **Run a negotiation locally:**
@@ -263,11 +273,61 @@ python -m scripts.try_agent power --impersonate --scenario grid_stress
 curl -X POST "$(gcloud run services describe gridmind --region=us-east4 --format='value(status.url)')/negotiate" -H "Authorization: Bearer $(gcloud auth print-identity-token)" -H "Content-Type: application/json" -d '{"workload_id":"wl-2026-0842","format":"text"}'
 ```
 
-**Demonstrate the security model:**
+---
+
+## Reproducible testing
+
+Four commands. The first three need `gcloud auth application-default login` and
+run against the live project; the fourth needs no credentials and no model calls.
+Every refusal they report is produced by Google Cloud, not by application code.
+
+```bash
+bash infra/iam/03_verify_isolation.sh
+```
+
+**14 checks.** Each specialist reaches its own database and is refused by all
+three others. The orchestrator reaches `shared-db` and is refused by all four
+domain stores. Specialists are refused `shared-db`. Expect `ISOLATION VERIFIED`.
 
 ```bash
 bash scripts/demo_denial.sh
 ```
+
+**7 checks, all three enforcement layers.** Anonymous and authenticated callers
+both get **404** from every internal service, because they are unreachable rather
+than merely refused. The orchestrator returns **403** without a token and **200**
+with one.
+
+```bash
+python -m seed.leak_check
+```
+
+**Cross-domain leak test.** Isolation asks whether an agent can *reach* another
+store; this asks whether we *copied* another domain's facts into its store. Both
+are needed. This one caught a real bug where a shared `notes` field had put
+*"5 liquid-ready racks against 6 needed"* into all four databases, letting every
+agent solve the problem alone while all 14 isolation checks stayed green.
+
+```bash
+python -m scripts.demo_guardrails
+```
+
+**6 assertions, no credentials and no model calls.** Feeds deliberately bad
+verdicts to the guardrails and asserts each outcome. Five are blocked: a zone
+231 kW short of the request, a zone with a switchgear outage called feasible, an
+invented zone id, a `feasible` verdict naming no zone at all, and an impossible
+zone hidden in a *proposed alternative* rather than in the verdict itself. The
+sixth is a correct verdict, which must be allowed through. Runs offline in about
+a second, so it is the one check that works with no GCP project at all.
+
+**Run a negotiation end to end:**
+
+```bash
+python -m scripts.negotiate --quiet
+```
+
+Reproducible from a fixed seed, so the round-one conflict — power `zone-a`,
+cooling `zone-c`, facilities and cost `zone-b` — appears on every run.
 
 ---
 
@@ -297,7 +357,9 @@ python -m scripts.negotiate --scenario grid_stress --quiet
   reconciliation. *Note: Gemini 3.5 is served only from Vertex's `global`
   endpoint; regional endpoints 404 for these model ids.*
 - **Google GenAI SDK** — structured output with pydantic response schemas
-- **Cloud Run** — six services, scale-to-zero, `max-instances=2`
+- **Cloud Run** — seven services, scale-to-zero, `max-instances=2` (the public web
+  tier is pinned to `1`, because a per-instance rate limiter is only a real cap at
+  one instance)
 - **Firestore** — five databases, native mode, IAM-Condition isolated
 - **Cloud Logging** — structured JSON, correlation-id threaded through every
   agent in a decision
